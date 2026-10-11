@@ -234,6 +234,16 @@ if (is_file("{$target}/storage/cache/modules.cache.php")) {
     unlink("{$target}/storage/cache/modules.cache.php");
 }
 
+// Cockpit also keeps the parsed content models in its key-value database. The
+// model files above would be copied but never read again: the admin would go
+// on showing the previous fields, with no error. It is rebuilt on the next
+// request once this file is gone.
+foreach (glob("{$root}/var/data/app.memory.sqlite*") ?: [] as $memory) {
+    if (is_file($memory) && !unlink($memory)) {
+        fail("suppression impossible : {$memory}");
+    }
+}
+
 // Runtime folders. Cockpit resolves #cache, #tmp and #uploads by looking them
 // up on disk: a missing one breaks the admin, so create them all up front.
 // The database itself lives in /var, outside the web root.
