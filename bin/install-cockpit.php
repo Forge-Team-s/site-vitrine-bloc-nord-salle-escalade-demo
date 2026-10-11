@@ -230,9 +230,19 @@ try {
         include "{$root}/cockpit/models/pages.model.php",
         $sections,
         ["{$root}/templates-client/blocs", "{$root}/templates/blocs"],
+        $ignores,
     );
 } catch (Throwable $e) {
     fail($e->getMessage());
+}
+
+// A type this site had declared before the socle shipped one of the same name.
+// Its own fields are kept: an update never takes away what a client already
+// uses. Said out loud, because the socle's version will not be seen.
+foreach ($ignores as $type) {
+    echo "\n  Le type « {$type} » reste celui de pages.model.php.\n"
+        ."  Le socle en livre un sous le même nom, laissé de côté : "
+        ."cockpit/sections/{$type}.section.php.\n";
 }
 
 if (!is_dir("{$target}/storage/content")
@@ -256,10 +266,12 @@ file_put_contents(
     .var_export($pages, true).";\n",
 );
 
-step(match (count($sections)) {
+$assembles = count($sections) - count($ignores);
+
+step(match ($assembles) {
     0 => 'Modèle de contenu en place.',
     1 => 'Modèle de contenu en place, avec un type de section assemblé.',
-    default => 'Modèle de contenu en place, avec '.count($sections).' types de section assemblés.',
+    default => "Modèle de contenu en place, avec {$assembles} types de section assemblés.",
 });
 
 // Project addons, reinstalled after the core so an update never removes them.

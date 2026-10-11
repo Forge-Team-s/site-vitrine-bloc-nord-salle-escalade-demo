@@ -38,7 +38,15 @@ prendre le fichier de section.
 ne correspond pas au type déclaré, un champ portant déjà une `condition`, un champ commun
 inexistant, un type déclaré deux fois.
 
-Rien à faire sur un site existant au-delà de la fusion.
+**Un type de section « Questions fréquentes » est livré**, le premier écrit au nouveau format.
+Les questions sont des `details` : elles s'ouvrent sans JavaScript et leur contenu est dans le
+HTML de la première réponse. Ses styles sont dans `site.css`, ses classes sont stables.
+
+Rien à faire sur un site existant au-delà de la fusion, y compris s'il a déjà son propre type
+« faq » : dans ce cas **la déclaration du site l'emporte**, celle du socle est laissée de côté,
+et l'installation le dit sans s'arrêter. Le contenu saisi par le client n'est pas touché.
+`docs/guide-integration.md` décrit comment prendre la version du socle à la place, le jour où on
+le décide.
 
 ## 2.1.5 — 2026-10-11
 

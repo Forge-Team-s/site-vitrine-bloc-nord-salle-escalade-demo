@@ -34,12 +34,15 @@ final class Registry
     {
         $sections = [];
 
-        foreach ($directories as $directory) {
+        foreach ($directories as $rang => $directory) {
             $files = glob(rtrim($directory, '/\\').'/*.section.php') ?: [];
             sort($files);
 
             foreach ($files as $file) {
                 $section = self::read($file);
+                // The first directory is the socle's. A site cannot edit what
+                // it holds, so a clash with the model is settled differently.
+                $section['socle'] = $rang === 0;
                 $type = $section['type'];
 
                 if (isset($sections[$type])) {
@@ -133,8 +136,14 @@ final class Registry
      * @param list<string> $templateDirectories where a section template may live
      * @return array<string, mixed>
      */
-    public static function assemble(array $model, array $sections, array $templateDirectories): array
-    {
+    public static function assemble(
+        array $model,
+        array $sections,
+        array $templateDirectories,
+        ?array &$ignores = null,
+    ): array {
+        $ignores = [];
+
         if ($sections === []) {
             return $model;
         }
@@ -146,13 +155,29 @@ final class Registry
         foreach ($sections as $type => $section) {
             self::needsTemplate($section, $templateDirectories);
 
+            $dansLeModele = false;
+
             foreach ($options as $option) {
                 if (($option['value'] ?? null) === $type) {
-                    throw new RuntimeException(
-                        "Le type « {$type} » est déjà proposé par pages.model.php : "
-                        .'le retirer du modèle, ou supprimer '.self::short($section['fichier']).'.'
-                    );
+                    $dansLeModele = true;
+                    break;
                 }
+            }
+
+            if ($dansLeModele && !($section['socle'] ?? false)) {
+                throw new RuntimeException(
+                    "Le type « {$type} » est déclaré deux fois : dans "
+                    .'cockpit/models/pages.model.php, et dans '.self::short($section['fichier'])
+                    .".\n    Garder un seul des deux."
+                );
+            }
+
+            // The site declared this type before the socle shipped it. Its own
+            // fields win and the socle's file is left aside: an update never
+            // takes away what a site has already put in front of its client.
+            if ($dansLeModele) {
+                $ignores[] = $type;
+                continue;
             }
 
             $options[] = ['value' => $type, 'label' => $section['label']];
@@ -266,7 +291,7 @@ final class Registry
      *
      * @return array<string, mixed>
      */
-    public static function pagesModel(string $root): array
+    public static function pagesModel(string $root, ?array &$ignores = null): array
     {
         $model = include "{$root}/cockpit/models/pages.model.php";
 
@@ -274,6 +299,7 @@ final class Registry
             $model,
             self::discover(["{$root}/cockpit/sections", "{$root}/cockpit/sections-client"]),
             ["{$root}/templates-client/blocs", "{$root}/templates/blocs"],
+            $ignores,
         );
     }
 }

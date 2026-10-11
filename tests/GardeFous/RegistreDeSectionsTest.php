@@ -151,15 +151,53 @@ final class RegistreDeSectionsTest extends TestCase
     }
 
     #[Test]
-    public function un_type_declare_des_deux_cotes_est_refuse_en_nommant_le_modele(): void
+    public function un_type_du_site_declare_aussi_dans_le_modele_est_refuse(): void
     {
         $this->gabarit('hero');
         $this->section('sections-client', 'hero', "['type' => 'hero', 'label' => 'Bandeau']");
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/déjà proposé par pages\.model\.php/');
+        $this->expectExceptionMessageMatches('/déclaré deux fois.+pages\.model\.php.+Garder un seul/s');
 
         $this->assembler();
+    }
+
+    #[Test]
+    public function un_type_du_socle_deja_dans_le_modele_laisse_la_place_au_site(): void
+    {
+        $this->gabarit('hero');
+        $this->section('sections', 'hero', "['type' => 'hero', 'label' => 'Bandeau du socle', "
+            ."'champs' => [['name' => 'venu_du_socle', 'type' => 'text']]]");
+
+        $assemble = Registry::assemble(
+            $this->modele(),
+            Registry::discover(["{$this->racine}/sections", "{$this->racine}/sections-client"]),
+            ["{$this->racine}/blocs"],
+            $ignores,
+        );
+
+        $this->assertSame(['hero'], $ignores, 'le type laissé de côté doit être signalé');
+        $this->assertSame(['hero', 'texte-image'], $this->typesProposes($assemble));
+        $this->assertNull(
+            $this->champ($assemble, 'venu_du_socle'),
+            'les champs du socle ne doivent pas s\'ajouter à ceux que le site a déjà',
+        );
+    }
+
+    #[Test]
+    public function sans_collision_aucun_type_n_est_laisse_de_cote(): void
+    {
+        $this->gabarit('faq');
+        $this->section('sections', 'faq', "['type' => 'faq', 'label' => 'Questions']");
+
+        Registry::assemble(
+            $this->modele(),
+            Registry::discover(["{$this->racine}/sections", "{$this->racine}/sections-client"]),
+            ["{$this->racine}/blocs"],
+            $ignores,
+        );
+
+        $this->assertSame([], $ignores);
     }
 
     #[Test]

@@ -26,8 +26,8 @@ touchez ne sont pas ceux qu'une mise à jour modifie.
 
 ### Les sections livrées ne se copient pas
 
-`hero`, `texte-image`, `contact`, `formulaire` et `temoignages` sont disponibles telles quelles.
-Rien à copier pour les utiliser.
+`hero`, `texte-image`, `contact`, `formulaire`, `temoignages` et `faq` sont disponibles telles
+quelles. Rien à copier pour les utiliser.
 
 | Vous voulez | Vous faites |
 |---|---|
@@ -201,8 +201,34 @@ Un site n'a rien à reprendre pour monter de version : ses types restent où ils
 continuent de fonctionner. Les nouveaux se déclarent par fichier. Le client ne voit aucune
 différence entre les deux.
 
-La seule chose interdite est de déclarer **le même type des deux côtés** : l'installation
-s'arrête en nommant les deux endroits, plutôt que l'un l'emporte en silence.
+Déclarer **le même type dans `pages.model.php` et dans `cockpit/sections-client/`** arrête
+l'installation, en nommant les deux endroits plutôt que l'un l'emporte en silence. Les deux
+appartiennent au site : à lui de choisir lequel garder.
+
+#### Si le socle livre un type que vous aviez déjà
+
+Le cas se présente quand une version ajoute à `cockpit/sections/` un type que vous aviez écrit
+vous-même dans `pages.model.php`, sous le même nom.
+
+**Votre déclaration l'emporte, et l'installation ne s'arrête pas.** Elle le dit :
+
+```
+  Le type « faq » reste celui de pages.model.php.
+  Le socle en livre un sous le même nom, laissé de côté : cockpit/sections/faq.section.php.
+```
+
+Vos champs, votre gabarit et le contenu déjà saisi par le client restent en place. Rien à faire,
+le message se répétera à chaque installation.
+
+Pour prendre la version du socle à la place, quand vous le décidez :
+
+1. relever les champs que le client a remplis, le contenu n'est pas repris automatiquement si
+   les noms de champs diffèrent ;
+2. retirer de `pages.model.php` l'option du type et ses champs propres, et ôter le type des
+   listes partagées `$hasImage` et `$hasTexte` ;
+3. supprimer votre gabarit de `templates-client/blocs/` si vous voulez celui du socle, ou le
+   garder : une copie de même nom l'emporte toujours ;
+4. `php bin/install-cockpit.php --force`, puis vérifier le rendu des pages concernées.
 
 Types de champ disponibles : `text`, `wysiwyg`, `boolean`, `select`, `color`, `date`,
 `datetime`, `number`, `asset`, `set`, `table`, `tags`, `contentItemLink`.
