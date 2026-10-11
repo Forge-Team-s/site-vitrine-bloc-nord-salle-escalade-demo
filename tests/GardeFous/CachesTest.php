@@ -50,6 +50,24 @@ final class CachesTest extends TestCase
     }
 
     #[Test]
+    public function la_mise_en_ligne_sans_ligne_de_commande_dit_quoi_purger(): void
+    {
+        $procedure = $this->source('docs/mise-a-jour-socle.md');
+
+        $this->assertStringContainsString(
+            'var/data/app.memory.sqlite',
+            $procedure,
+            'sans ligne de commande, rien ne purge ce cache : le modèle monté resterait invisible',
+        );
+
+        $this->assertStringContainsString(
+            'var/cache/twig',
+            $procedure,
+            'un transfert qui conserve les dates laisse les gabarits compilés en place',
+        );
+    }
+
+    #[Test]
     public function l_installation_retire_le_cache_des_modules_de_cockpit(): void
     {
         $this->assertStringContainsString(

@@ -12,6 +12,27 @@ qu'il prend pour un socle recopié chez chaque client :
 La version installée est inscrite dans le fichier `VERSION`, à la racine. La procédure de
 fusion est dans [docs/mise-a-jour-socle.md](docs/mise-a-jour-socle.md).
 
+## 2.1.5 — 2026-10-11
+
+La mise en ligne laissait trois choses à deviner, dont une a bloqué un site en service le
+9 octobre 2026.
+
+**`docs/mise-a-jour-socle.md`**, étape 6, dit que le modèle de contenu existe en deux
+exemplaires et lequel fait foi. Modifier la copie installée de `public/admin/` puis lancer
+l'installation annulait la modification, sans message.
+
+**Le besoin de réseau de `install-cockpit.php --force`** est écrit : la commande télécharge
+l'archive de Cockpit avant toute copie, et s'arrête sans rien faire sur un hébergement sans
+accès sortant. Le contournement est donné, envoyer aussi `var/tmp/install/`, que `git pull`
+n'apporte pas puisque `var/` n'est pas versionné.
+
+**La mise en ligne sans ligne de commande** gagne le tableau de ce qu'il reste à purger à la
+main, selon ce qui a changé : le cache de pages par un enregistrement dans l'administration,
+`var/data/app.memory.sqlite` quand un modèle a changé, et `var/cache/twig` quand le transfert a
+conservé les dates d'origine des fichiers.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
 ## 2.1.4 — 2026-10-11
 
 La procédure de mise à jour écrite à la main était exacte une fois, puis fausse. Trois écarts
