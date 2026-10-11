@@ -12,6 +12,29 @@ qu'il prend pour un socle recopié chez chaque client :
 La version installée est inscrite dans le fichier `VERSION`, à la racine. La procédure de
 fusion est dans [docs/mise-a-jour-socle.md](docs/mise-a-jour-socle.md).
 
+## 2.1.3 — 2026-10-11
+
+Deux caches pouvaient servir un contenu périmé sans jamais le signaler. Un travail juste,
+monté sur un hébergement, restait sans effet et sans message.
+
+**`public/index.php`** renseigne `auto_reload` pour Twig. Sans lui, l'option suivait `debug`,
+donc fausse en production : les gabarits compilés dans `var/cache/twig` étaient servis
+indéfiniment, sans que la date du gabarit source soit jamais comparée.
+
+**`bin/purge-cache.php`** vide aussi `var/cache/twig`, par la nouvelle classe
+`App\Cache\TemplateCache`. Aucune commande du socle ne le faisait. La mise à jour d'un site en
+bénéficie sans changement, puisqu'elle appelle déjà cette purge.
+
+**`bin/install-cockpit.php`** retire `var/data/app.memory.sqlite`, où Cockpit garde les modèles
+de contenu analysés. Le cache des modules était purgé, celui des modèles non : un type de
+section ajouté était copié au bon endroit sans que l'administration le montre. Constaté sur un
+site en service le 9 octobre 2026.
+
+**`docs/tests.md`** n'annonce plus le nombre de tests. Il avait déjà divergé une fois et rien ne
+le reliait à la suite. Une ligne est ajoutée au tableau des garde-fous pour les trois caches.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
 ## 2.1.2 — 2026-10-06
 
 Documentation seule. `docs/tests.md` annonçait 250 tests alors que la suite en exécute 255 : les
