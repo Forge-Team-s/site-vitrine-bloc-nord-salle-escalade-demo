@@ -14,9 +14,11 @@ après, à l'étape 6.
 ### La commande
 
 ```bash
-php bin/maj-socle.php                 # où en est le site, et ce qui existe
-php bin/maj-socle.php --vers=2.0.13   # fusionne et enchaîne les commandes qui suivent
+php bin/maj-socle.php                  # où en est le site, et ce qui existe
+php bin/maj-socle.php --vers=X.Y.Z     # fusionne et enchaîne les commandes qui suivent
 ```
+
+`X.Y.Z` est à remplacer par le numéro visé, sans le `v` : la première commande les liste.
 
 Elle déroule les étapes 1 à 5 décrites plus bas : branche dédiée, fusion de l'étiquette, puis
 `composer install`, `install-cockpit.php --force`, `purge-cache.php` et les tests.
@@ -56,6 +58,36 @@ git tag -l 'v*' --sort=v:refname
 `git tag -l` sans motif listerait aussi les étiquettes propres au site ; `'v*'` ne garde que
 celles du socle.
 
+> **Le préfixe `v` appartient au socle.** Une étiquette posée par le site ne commence jamais
+> par `v`. C'est ce qui permet au filtre ci-dessus de fonctionner, et ce qui évite le refus
+> décrit juste en dessous.
+
+#### Si le `fetch` affiche « would clobber existing tag »
+
+```
+ ! [rejected]  v2.0.6 -> v2.0.6  (would clobber existing tag)
+```
+
+Le site porte déjà une étiquette de ce nom, qui désigne autre chose. Git refuse de la déplacer,
+et c'est une protection.
+
+**Le refus ne porte que sur cette étiquette.** Toutes les autres sont arrivées. `git fetch`
+sort malgré tout en erreur, ce qui donne à la commande entière l'apparence d'un échec : ce n'en
+est pas un, et la version visée est le plus souvent déjà là.
+
+Regarder ce que l'étiquette locale désigne avant de décider :
+
+```bash
+git show --no-patch --format='%H %ci %s' v2.0.6
+```
+
+| Ce que c'est | Ce qu'il faut faire |
+|---|---|
+| Une étiquette propre au site, qui porte mal son nom | la renommer sans le préfixe `v` : `git tag nouveau-nom v2.0.6` puis `git tag -d v2.0.6` |
+| Une ancienne copie de l'étiquette du socle | la remplacer : `git fetch socle --tags --force` |
+
+Reprendre ensuite `git tag -l 'v*' --sort=v:refname`.
+
 `--sort=v:refname` n'est pas un détail : le tri par défaut est alphabétique, et il place
 `v2.0.10` entre `v2.0.1` et `v2.0.2`. La dernière version de la liste ne serait pas la plus
 récente.
@@ -82,17 +114,24 @@ git checkout main
 git pull
 ```
 
-Créer une branche dédiée à la mise à jour du socle :
+Créer une branche dédiée à la mise à jour du socle. **Son nom porte la version visée**, sinon
+la deuxième mise à jour butera sur la branche laissée par la première :
 
 ```bash
-git checkout -b maj-socle
+git checkout -b maj-socle-X.Y.Z
 ```
+
+C'est le nom que pose `bin/maj-socle.php`. Si git répond `a branch named … already exists`,
+cette mise à jour est déjà commencée : la reprendre avec `git checkout maj-socle-X.Y.Z`, ou la
+supprimer avec `git branch -d maj-socle-X.Y.Z` si elle a déjà été fusionnée.
 
 Fusionner ensuite la nouvelle version du socle :
 
 ```bash
-git merge v2.0.8 --allow-unrelated-histories
+git merge vX.Y.Z --allow-unrelated-histories
 ```
+
+`X.Y.Z` est partout le numéro choisi à l'étape 2. Ces lignes ne se recopient pas telles quelles.
 
 L’option `--allow-unrelated-histories` permet d’autoriser la fusion lorsque les deux historiques Git n’ont pas d’ancêtre commun.
 
@@ -145,7 +184,7 @@ elle est absente.
 Ouvrir enfin une page du site et `/admin`, puis pousser pour relecture :
 
 ```bash
-git push -u origin maj-socle
+git push -u origin maj-socle-X.Y.Z
 ```
 
 ### 6. Mettre à jour le site en ligne
@@ -249,8 +288,8 @@ Un dépôt créé depuis un template démarre sur un historique neuf, sans ancê
 socle. La première fusion demande donc une option que les suivantes n'auront pas :
 
 ```bash
-git checkout -b maj-socle
-git merge v2.0.4 --allow-unrelated-histories
+git checkout -b maj-socle-X.Y.Z
+git merge vX.Y.Z --allow-unrelated-histories
 ```
 
 Les fichiers identiques des deux côtés fusionnent sans intervention, et ceux que le socle a

@@ -12,6 +12,29 @@ qu'il prend pour un socle recopié chez chaque client :
 La version installée est inscrite dans le fichier `VERSION`, à la racine. La procédure de
 fusion est dans [docs/mise-a-jour-socle.md](docs/mise-a-jour-socle.md).
 
+## 2.1.4 — 2026-10-11
+
+La procédure de mise à jour écrite à la main était exacte une fois, puis fausse. Trois écarts
+relevés sur une montée de version réelle le 8 octobre 2026.
+
+**`docs/mise-a-jour-socle.md`**, étape 2, traite le refus
+`would clobber existing tag` : il ne porte que sur l'étiquette nommée, les autres sont bien
+arrivées, et `git fetch` sort malgré tout en erreur. Un tableau dit quoi faire selon ce que
+l'étiquette locale désigne. La règle qui évite le cas est énoncée : le préfixe `v` appartient au
+socle, une étiquette propre à un site ne commence jamais par `v`.
+
+**Étape 3**, la branche porte désormais la version visée, `maj-socle-X.Y.Z`, le nom que pose
+déjà `bin/maj-socle.php`. Le nom fixe précédent était pris dès la deuxième mise à jour, et le
+document ne disait pas quoi faire du refus. Le cas est décrit.
+
+**Les numéros de version des exemples** sont remplacés par `X.Y.Z`. Recopiés tels quels, ils
+faisaient fusionner une version qui n'était ni celle du site ni celle visée.
+
+Deux garde-fous ajoutés : la branche documentée est celle que construit la commande, et aucune
+ligne de commande du document ne porte de numéro de version à recopier.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
 ## 2.1.3 — 2026-10-11
 
 Deux caches pouvaient servir un contenu périmé sans jamais le signaler. Un travail juste,
