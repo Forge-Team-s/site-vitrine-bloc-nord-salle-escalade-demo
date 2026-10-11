@@ -192,6 +192,18 @@ git push -u origin maj-socle-X.Y.Z
 Les étapes précédentes n'ont touché que le dépôt. Une fois la branche fusionnée dans `main`,
 reporter le socle sur l'hébergement. Deux cas, selon ce que l'hébergeur permet.
 
+#### Le modèle de contenu existe en deux exemplaires
+
+Un seul se modifie :
+
+| Fichier | Ce que c'est |
+|---|---|
+| `cockpit/models/pages.model.php` | **la source**, versionnée, celle qu'on modifie |
+| `public/admin/storage/content/pages.model.php` | la copie installée, réécrite à chaque `install-cockpit.php` |
+
+Modifier la copie puis lancer l'installation annule la modification, sans message. Le dépôt fait
+foi.
+
 #### Avec un accès SSH et un dépôt git sur le serveur
 
 ```bash
@@ -224,14 +236,34 @@ Ce n'est donc pas une autre opération, c'est la même avec un garde-fou. Le ré
 passage le comportement de `git pull`, qui dépend sinon de la version de git et de la
 configuration de la machine.
 
+> **`install-cockpit.php --force` a besoin du réseau avant de copier quoi que ce soit.** Il
+> réinstalle le cœur de Cockpit depuis une archive officielle, qu'il télécharge si elle est
+> absente du serveur ou si son empreinte ne correspond pas. Sur un hébergement sans accès
+> sortant, la commande s'arrête **avant** d'avoir rien copié.
+>
+> Le contournement tient en une ligne : envoyer aussi le dossier `var/tmp/install/` du poste de
+> développement, où l'archive est déjà présente et vérifiée. `var/` n'étant pas versionné, elle
+> n'arrive pas avec `git pull`.
+
 #### Par envoi de fichiers
 
-Voir [installation-mutualise.md](installation-mutualise.md). Après l'envoi, relancer les deux
-commandes ci-dessus si la ligne de commande existe.
+Voir [installation-mutualise.md](installation-mutualise.md), qui décrit aussi les droits
+d'écriture à ouvrir. Après l'envoi, relancer les deux commandes ci-dessus si la ligne de
+commande existe.
 
-Sans ligne de commande, enregistrer n'importe quel contenu depuis l'administration vide le
-cache ; les fichiers de `public/admin/` doivent alors être préparés en local puis envoyés,
-puisque `install-cockpit.php` ne peut pas tourner sur place.
+Sans ligne de commande, `install-cockpit.php` ne peut pas tourner sur place : les fichiers de
+`public/admin/` doivent être préparés en local puis envoyés. Il reste alors deux choses à faire
+à la main, que rien ne signale si on les oublie.
+
+| Ce qui a changé | Ce qu'il faut faire |
+|---|---|
+| N'importe quoi | enregistrer un contenu depuis l'administration : cela vide le cache de pages |
+| Un gabarit de `templates/` ou `templates-client/` | rien de plus, **si le transfert a daté les fichiers du jour**. Twig recompile un gabarit dont la date a changé. Un client de transfert réglé pour conserver les dates d'origine le laisse passer pour inchangé : supprimer alors le contenu de `var/cache/twig` |
+| Un modèle de `cockpit/models/` | supprimer en plus `var/data/app.memory.sqlite`, où Cockpit garde les modèles analysés |
+
+Le dernier point est celui qui coûte : sans cette suppression, le modèle est bien en place sur
+l'hébergement et l'administration continue d'afficher les champs d'avant, sans erreur. Cockpit
+reconstruit le fichier à la requête suivante.
 
 ## Ce qui entre en conflit
 
