@@ -215,11 +215,52 @@ copyRecursive("{$root}/cockpit/config.php", "{$target}/config/config.php");
 copyRecursive("{$root}/cockpit/bootstrap.php", "{$target}/config/bootstrap.php");
 step('Configuration du projet en place.');
 
-foreach (glob("{$root}/cockpit/models/*.model.php") ?: [] as $model) {
-    copyRecursive($model, "{$target}/storage/content/".basename($model));
+// The pages model is assembled before being installed: its section types may
+// live in their own files, under cockpit/sections for the socle and
+// cockpit/sections-client for this site. Every other model is copied as it is.
+require_once "{$root}/cockpit/lib/Registry.php";
+
+try {
+    $sections = Sections\Registry::discover([
+        "{$root}/cockpit/sections",
+        "{$root}/cockpit/sections-client",
+    ]);
+
+    $pages = Sections\Registry::assemble(
+        include "{$root}/cockpit/models/pages.model.php",
+        $sections,
+        ["{$root}/templates-client/blocs", "{$root}/templates/blocs"],
+    );
+} catch (Throwable $e) {
+    fail($e->getMessage());
 }
 
-step('Modèle de contenu en place.');
+if (!is_dir("{$target}/storage/content")
+    && !mkdir("{$target}/storage/content", 0o755, true)
+    && !is_dir("{$target}/storage/content")) {
+    fail("création impossible : {$target}/storage/content");
+}
+
+foreach (glob("{$root}/cockpit/models/*.model.php") ?: [] as $model) {
+    if (basename($model) !== 'pages.model.php') {
+        copyRecursive($model, "{$target}/storage/content/".basename($model));
+    }
+}
+
+// Written rather than copied: what Cockpit reads is the assembled model, not
+// the source. Editing the copy would be lost at the next installation.
+file_put_contents(
+    "{$target}/storage/content/pages.model.php",
+    "<?php\n\n// Assemblé par bin/install-cockpit.php. Modifier cockpit/models/pages.model.php\n"
+    ."// ou un fichier de cockpit/sections-client/, jamais celui-ci.\n\nreturn "
+    .var_export($pages, true).";\n",
+);
+
+step(match (count($sections)) {
+    0 => 'Modèle de contenu en place.',
+    1 => 'Modèle de contenu en place, avec un type de section assemblé.',
+    default => 'Modèle de contenu en place, avec '.count($sections).' types de section assemblés.',
+});
 
 // Project addons, reinstalled after the core so an update never removes them.
 foreach (glob("{$root}/cockpit/addons/*", GLOB_ONLYDIR) ?: [] as $addon) {

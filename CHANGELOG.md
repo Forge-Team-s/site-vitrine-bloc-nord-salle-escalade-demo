@@ -12,6 +12,34 @@ qu'il prend pour un socle recopié chez chaque client :
 La version installée est inscrite dans le fichier `VERSION`, à la racine. La procédure de
 fusion est dans [docs/mise-a-jour-socle.md](docs/mise-a-jour-socle.md).
 
+## 2.2.0 — 2026-10-12
+
+Un type de section se déclarait à quatre endroits de `cockpit/models/pages.model.php` : une
+variable de condition, une option du champ `type`, les listes partagées des champs communs, et
+ses propres champs. Ce fichier appartient au socle : tout site qui ajoutait un type entrait en
+conflit à chaque mise à jour.
+
+**Un type peut désormais se déclarer dans son propre fichier**, `cockpit/sections-client/` pour
+un site, `cockpit/sections/` pour le socle. `cockpit/models/pages.model.php` n'est plus touché.
+
+**`cockpit/lib/Registry.php`** découvre ces fichiers, les valide, écrit la condition de chaque
+champ depuis le nom du type, et étend les listes partagées demandées par `communs`.
+`bin/install-cockpit.php` installe le modèle assemblé.
+
+**Les deux écritures cohabitent.** Un site monte de version sans reprendre aucun de ses types
+existants, et déclare les nouveaux par fichier. Le client ne voit aucune différence. Le seul cas
+refusé est un même type déclaré des deux côtés : l'installation s'arrête en nommant les deux
+endroits.
+
+L'écriture dans `pages.model.php` sera dépréciée dans une version à venir. Pour un type nouveau,
+prendre le fichier de section.
+
+**Les refus**, chacun nommant le fichier en cause : un type sans gabarit, un fichier dont le nom
+ne correspond pas au type déclaré, un champ portant déjà une `condition`, un champ commun
+inexistant, un type déclaré deux fois.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
 ## 2.1.5 — 2026-10-11
 
 La mise en ligne laissait trois choses à deviner, dont une a bloqué un site en service le
