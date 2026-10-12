@@ -269,9 +269,15 @@ reconstruit le fichier à la requête suivante.
 
 | Fichiers | À la fusion |
 |---|---|
-| `templates-client/` | jamais — le socle n'y écrit pas |
+| `templates-client/`, `cockpit/sections-client/` | jamais — le socle n'y écrit pas |
+| `public/assets/css/client.css` | jamais — il est fait pour être écrit par le site |
 | `.env`, `var/`, `public/medias/`, `public/admin/` | jamais — non versionnés (sauf `public/medias/.htaccess`) |
-| `templates/`, `src/`, `public/assets/` | conflit s'ils ont été modifiés dans le site |
+| `templates/`, `src/`, `bin/`, `cockpit/sections/`, `cockpit/lib/`, le reste de `public/assets/` | conflit s'ils ont été modifiés dans le site |
+| `cockpit/models/pages.model.php` | conflit si le site y a déclaré des types de section |
+
+Le dernier cas est le plus courant, et il se supprime en déclarant le type dans
+`cockpit/sections-client/` plutôt que dans le modèle. Voir
+[guide-integration.md](guide-integration.md).
 
 Placer toute personnalisation dans `templates-client/` — voir
 [guide-integration.md](guide-integration.md).

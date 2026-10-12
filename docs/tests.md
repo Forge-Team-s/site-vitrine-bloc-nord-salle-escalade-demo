@@ -33,6 +33,7 @@ qui empêche le site d'être cassé depuis l'administration.
 | Version | `VERSION` suit la première entrée du journal, et porte un numéro de la forme X.Y.Z |
 | Mise à jour d'un site | la commande refuse un arbre de travail non propre, une version inconnue, une version plus ancienne que celle du site, une version majeure |
 | Caches | Twig relit ses gabarits en production, la purge vide les gabarits compilés, l'installation retire les modèles analysés par Cockpit |
+| Registre des sections | un fichier de section mal formé est refusé en étant nommé, un type déclaré deux fois est refusé, un type que le site avait déjà n'est pas remplacé par celui du socle |
 
 Les tests ne touchent pas au réseau et ne démarrent pas Cockpit : ils s'exécutent en moins
 d'une seconde. Un seul lit les fichiers de l'administration installée, pour confronter les
