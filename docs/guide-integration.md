@@ -101,6 +101,8 @@ Livré avec le socle — **ne pas modifier** :
 | `templates/blocs/*.html.twig` | un fichier = un type de section |
 | `templates/partials/image.html.twig` | rendu d'une image — passage obligé |
 | `templates/partials/pied.html.twig` | pied de page |
+| `cockpit/sections/*.section.php` | les champs des types de section livrés |
+| `cockpit/lib/Registry.php` | assemble le modèle des pages depuis ces fichiers |
 | `public/assets/css/site.css` | base : structure, typographie, accessibilité |
 
 Propre à ce site — **c'est là que vous écrivez** :

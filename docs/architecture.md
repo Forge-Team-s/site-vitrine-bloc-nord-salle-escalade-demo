@@ -169,6 +169,21 @@ fait pas grossir.
 être modifié, donc une mise à jour du socle se récupère par `git merge` sans conflit sur la
 maquette. Même principe pour `client.css`, chargé après `site.css`.
 
+### Les types de section sont assemblés depuis deux dossiers
+
+`cockpit/sections/` pour le socle, `cockpit/sections-client/` pour le site. `Registry` les
+découvre, écrit la condition de chaque champ depuis le nom du type, étend les listes partagées,
+et `bin/install-cockpit.php` installe le modèle obtenu.
+
+Un type se déclarait auparavant à quatre endroits de `cockpit/models/pages.model.php`, un
+fichier du socle : tout site qui en ajoutait un entrait en conflit à chaque mise à jour. Même
+raison que pour les gabarits, même remède.
+
+Les deux écritures restent valables, et c'est ce qui permet à un site de monter de version sans
+reprendre ses types existants. Quand un type est déclaré des deux côtés, celui du site
+l'emporte si l'autre vient du socle, et l'installation s'arrête s'ils appartiennent tous deux au
+site.
+
 ### Le cache est purgé en totalité
 
 L'identité du site, le menu et les titres de pages figurent sur toutes les pages. Une purge
