@@ -74,6 +74,7 @@ if ($nomActuel === 'Bloc Nord' && !$reinitialiser) {
 // remplaceront celles-ci depuis l'administration, champ par champ.
 
 $visuels = [
+    'logo' => ['logo.webp', 'Bloc Nord — logo'],
     'bandeau' => ['bandeau-salle.webp', 'Bloc Nord — vue d’ensemble'],
     'bloc' => ['zone-bloc.webp', 'Bloc Nord — zone de bloc'],
     'cours' => ['cours-adultes.webp', 'Bloc Nord — cours adultes'],
@@ -85,7 +86,12 @@ $images = [];
 
 foreach ($visuels as $cle => [$fichier, $titre]) {
 
-    $existant = $app->dataStorage->findOne('assets', ['title' => $titre]);
+    // Retrouvé par son titre et son poids : un visuel retouché dans demo/images
+    // est envoyé à nouveau, l'ancien reste dans la médiathèque.
+    $existant = $app->dataStorage->findOne('assets', [
+        'title' => $titre,
+        'size' => filesize(__DIR__."/images/{$fichier}"),
+    ]);
 
     if ($existant) {
         $images[$cle] = $existant;
@@ -128,6 +134,7 @@ $content->saveItem('settings', array_merge($content->item('settings') ?? [], [
     'description' => 'Salle d’escalade de bloc à Lomme, près de Lille : 900 m², 250 blocs, zone enfants '
         .'et cours. Tarifs, horaires et planning de la semaine.',
     'siret' => '',
+    'logo' => $images['logo'],
     'imagePartage' => $images['bandeau'],
     // Les liens sont orange foncé : l'orange vif du logo n'atteint pas le
     // contraste minimal sur fond blanc. Il reste en fond, sous du texte noir.

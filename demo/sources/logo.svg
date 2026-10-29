@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 160" width="400" height="160">
+  <title>Bloc Nord</title>
+  <!-- Le bloc : une prise taillée en facettes, pointe vers le nord. -->
+  <g transform="translate(16 12)">
+    <polygon points="68,0 136,52 112,136 24,136 0,52" fill="#ff6a13"/>
+    <polygon points="68,0 136,52 68,70" fill="#ff8a45"/>
+    <polygon points="0,52 68,70 24,136" fill="#e05500"/>
+    <polygon points="68,70 112,136 24,136" fill="#c94a00"/>
+    <!-- La flèche du nord, en creux. -->
+    <polygon points="68,26 92,78 68,66 44,78" fill="#111111"/>
+    <circle cx="96" cy="104" r="7" fill="#3fb4bc"/>
+  </g>
+  <!-- Le nom. -->
+  <text x="172" y="78" font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="64" letter-spacing="2" fill="#ffffff">BLOC</text>
+  <text x="172" y="142" font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="64" letter-spacing="2" fill="#ff6a13">NORD</text>
+</svg>

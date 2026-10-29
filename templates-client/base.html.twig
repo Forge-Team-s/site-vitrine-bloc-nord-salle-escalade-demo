@@ -1,7 +1,8 @@
 {# Page shell. Content is rendered server-side and complete on first response.
 
-   Copie de templates/base.html.twig (socle 2.2.1) : seul ajout, le bandeau
-   de démonstration sous le lien d'évitement. Après une mise à jour du socle,
+   Copie de templates/base.html.twig (socle 2.2.1). Deux ajouts : le bandeau
+   de démonstration sous le lien d'évitement, et le logo de l'identité du
+   site à la place du nom quand il est renseigné. Après une mise à jour du socle,
    comparer avec : git diff vX.Y.Z -- templates/base.html.twig #}
 <!doctype html>
 <html lang="fr">
@@ -36,7 +37,20 @@
 
 <header class="en-tete">
     <div class="en-tete__identite">
-        <p class="en-tete__nom"><a href="/">{{ site.nom|default('Site') }}</a></p>
+        {% if site.logo %}
+            {# Le logo porte le nom : sa description le dit, rien n'est répété. #}
+            <p class="en-tete__nom en-tete__nom--logo"><a href="/">
+                {%- include 'partials/image.html.twig' with {
+                    asset: site.logo,
+                    alt: site.nom|default('Accueil'),
+                    classe: 'en-tete__logo',
+                    sizes: '12rem',
+                    eager: true
+                } only -%}
+            </a></p>
+        {% else %}
+            <p class="en-tete__nom"><a href="/">{{ site.nom|default('Site') }}</a></p>
+        {% endif %}
         {% if site.slogan %}
             <p class="en-tete__slogan">{{ site.slogan }}</p>
         {% endif %}
