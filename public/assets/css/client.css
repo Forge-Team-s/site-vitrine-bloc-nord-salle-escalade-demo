@@ -895,3 +895,29 @@ button.bouton:hover {
 .pied a:focus-visible {
     outline-color: var(--bn-orange);
 }
+
+/* ── Bandeau de démonstration ─────────────────────────────────────────── */
+
+.bandeau-demo {
+    background: var(--bn-orange);
+    color: var(--bn-noir);          /* 6,6:1 */
+    border-bottom: 2px solid var(--bn-noir);
+}
+
+.bandeau-demo__texte {
+    max-width: var(--largeur);
+    margin: 0 auto;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.bandeau-demo__lien {
+    color: var(--bn-noir);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.bandeau-demo__lien:focus-visible {
+    outline-color: var(--bn-noir);
+}
