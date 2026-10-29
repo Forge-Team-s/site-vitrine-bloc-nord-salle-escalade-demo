@@ -145,9 +145,11 @@ $content->saveItem('settings', array_merge($content->item('settings') ?? [], [
     // contraste minimal sur fond blanc. Il reste en fond, sous du texte noir.
     'couleurPrincipale' => '#C2410C',
     'couleurTexte' => '#111111',
-    'email' => 'contact@blocnord.fr',
-    'telephone' => '03 20 00 00 00',
-    'adresse' => "Zone d’activités\n8 rue des Cheminots\n59160 Lomme",
+    // Coordonnées fictives : le domaine « .example » est réservé et ne peut
+    // appartenir à personne ; aucun numéro ni aucune rue réels n'est cité.
+    'email' => 'contact@bloc-nord.example',
+    'telephone' => '',
+    'adresse' => "Zone d’activités\n59160 Lomme",
     'horaires' => [
         'lundi' => '12h – 23h',
         'mardi' => '12h – 23h',
@@ -157,9 +159,7 @@ $content->saveItem('settings', array_merge($content->item('settings') ?? [], [
         'samedi' => '10h – 20h',
         'dimanche' => '10h – 19h',
     ],
-    'reseaux' => [
-        ['nom' => 'Instagram', 'url' => 'https://www.instagram.com/blocnord/'],
-    ],
+    'reseaux' => [],
 ]));
 
 step('Identité du site renseignée.');
@@ -540,13 +540,13 @@ enregistrerPage($content, [
     'slug' => 'nous-contacter',
     'seoTitre' => 'Contact et préinscription — Bloc Nord',
     'seoDescription' => 'Une question, une préinscription, un groupe ou un cours enfant ? '
-        .'Écrivez-nous ou retrouvez-nous au 8 rue des Cheminots à Lomme.',
+        .'Écrivez-nous ou retrouvez-nous dans la zone d’activités de Lomme.',
     'blocs' => [
         [
             'type' => 'formulaire',
             'titre' => 'Nous écrire',
             'texte' => '<p>Une question, une préinscription, une venue en groupe, un cours pour votre enfant ? '
-                .'Écrivez-nous. Sur Instagram, nous sommes <a href="https://www.instagram.com/blocnord/">@blocnord</a>.</p>',
+                .'Écrivez-nous.</p>',
         ],
         [
             'type' => 'contact',
