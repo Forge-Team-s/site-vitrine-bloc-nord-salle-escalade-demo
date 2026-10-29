@@ -28,6 +28,29 @@ $isTemoignages = "data.type === 'temoignages'";
 $hasImage = "['hero', 'texte-image'].includes(data.type)";
 $hasTexte = "['texte-image', 'contact', 'formulaire'].includes(data.type)";
 
+// Sections propres à Bloc Nord, rendues par templates-client/blocs/.
+$isAnnonce = "data.type === 'annonce'";
+$isTarifs = "data.type === 'tarifs'";
+$isPlanning = "data.type === 'planning'";
+$isEssentiel = "data.type === 'essentiel'";
+$isChiffres = "data.type === 'chiffres'";
+$isEspaces = "data.type === 'espaces'";
+$isQuestions = "data.type === 'questions'";
+$hasIntroduction = "['temoignages', 'tarifs', 'planning', 'espaces', 'questions'].includes(data.type)";
+$hasBouton = "['hero', 'annonce', 'tarifs', 'planning'].includes(data.type)";
+$hasNote = "['tarifs', 'planning'].includes(data.type)";
+$hasHoraires = "['contact', 'essentiel'].includes(data.type)";
+
+$jours = [
+    ['value' => 'lundi', 'label' => 'Lundi'],
+    ['value' => 'mardi', 'label' => 'Mardi'],
+    ['value' => 'mercredi', 'label' => 'Mercredi'],
+    ['value' => 'jeudi', 'label' => 'Jeudi'],
+    ['value' => 'vendredi', 'label' => 'Vendredi'],
+    ['value' => 'samedi', 'label' => 'Samedi'],
+    ['value' => 'dimanche', 'label' => 'Dimanche'],
+];
+
 return [
     'name' => 'pages',
     'label' => 'Pages',
@@ -94,6 +117,13 @@ return [
                                 ['value' => 'contact', 'label' => 'Coordonnées'],
                                 ['value' => 'formulaire', 'label' => 'Formulaire de contact'],
                                 ['value' => 'temoignages', 'label' => 'Témoignages'],
+                                ['value' => 'annonce', 'label' => 'Annonce (offre, fermeture exceptionnelle)'],
+                                ['value' => 'tarifs', 'label' => 'Tarifs'],
+                                ['value' => 'planning', 'label' => 'Planning de la semaine'],
+                                ['value' => 'essentiel', 'label' => 'L’essentiel : horaires et accès'],
+                                ['value' => 'chiffres', 'label' => 'Chiffres clés'],
+                                ['value' => 'espaces', 'label' => 'Espaces de la salle'],
+                                ['value' => 'questions', 'label' => 'Questions fréquentes'],
                             ],
                         ],
                     ],
@@ -160,7 +190,7 @@ return [
                         'label' => 'Texte du bouton',
                         'info' => 'Laisser vide pour ne pas afficher de bouton.',
                         'width' => '1-2',
-                        'condition' => $isHero,
+                        'condition' => $hasBouton,
                         'opts' => ['maxlength' => 40],
                     ],
                     [
@@ -169,7 +199,7 @@ return [
                         'label' => 'Adresse du bouton',
                         'info' => 'Adresse d’une page du site, par exemple /services.',
                         'width' => '1-2',
-                        'condition' => $isHero,
+                        'condition' => $hasBouton,
                         'opts' => ['placeholder' => '/services'],
                     ],
                     // ── Témoignages ─────────────────────────────────────
@@ -180,9 +210,9 @@ return [
                         'name' => 'introduction',
                         'type' => 'text',
                         'label' => 'Phrase d’introduction',
-                        'info' => 'Apparaît sous le titre, avant les témoignages.',
+                        'info' => 'Apparaît sous le titre de la section.',
                         'width' => '1-1',
-                        'condition' => $isTemoignages,
+                        'condition' => $hasIntroduction,
                         'opts' => ['multiline' => true, 'maxlength' => 200],
                     ],
                     [
@@ -245,8 +275,324 @@ return [
                         'label' => 'Afficher les horaires',
                         'info' => 'Les horaires saisis dans « Identité du site » apparaissent sous les coordonnées.',
                         'width' => '1-1',
-                        'condition' => $isContact,
+                        'condition' => $hasHoraires,
                         'opts' => ['default' => true],
+                    ],
+
+                    // ── Annonce ─────────────────────────────────────────
+                    [
+                        'name' => 'actif',
+                        'type' => 'boolean',
+                        'label' => 'Afficher l’annonce',
+                        'info' => 'Décocher pour la retirer du site sans l’effacer : il suffira de la recocher la prochaine fois.',
+                        'width' => '1-2',
+                        'condition' => $isAnnonce,
+                        'opts' => ['default' => true],
+                    ],
+                    [
+                        'name' => 'ton',
+                        'type' => 'select',
+                        'label' => 'Genre d’annonce',
+                        'width' => '1-2',
+                        'condition' => $isAnnonce,
+                        'opts' => [
+                            'options' => [
+                                ['value' => 'offre', 'label' => 'Offre ou nouvelle (orange)'],
+                                ['value' => 'alerte', 'label' => 'Fermeture ou changement d’horaires (noir)'],
+                            ],
+                        ],
+                    ],
+                    [
+                        'name' => 'message',
+                        'type' => 'text',
+                        'label' => 'Message',
+                        'info' => 'Une ou deux phrases. Exemple : « Salle fermée le 1er mai. »',
+                        'width' => '1-1',
+                        'condition' => $isAnnonce,
+                        'opts' => ['multiline' => true, 'maxlength' => 220],
+                    ],
+
+                    // ── Tarifs ──────────────────────────────────────────
+                    [
+                        'name' => 'lignes',
+                        'type' => 'set',
+                        'label' => 'Lignes de tarif',
+                        'info' => 'Une ligne par tarif, dans l’ordre d’affichage. Sept lignes au plus restent lisibles sur un téléphone.',
+                        'multiple' => true,
+                        'width' => '1-1',
+                        'condition' => $isTarifs,
+                        'opts' => [
+                            'display' => '${data.libelle || \'Tarif\'} ${data.prix || \'\'}',
+                            'fields' => [
+                                [
+                                    'name' => 'libelle',
+                                    'type' => 'text',
+                                    'label' => 'Intitulé',
+                                    'required' => true,
+                                    'width' => '1-2',
+                                    'opts' => ['placeholder' => 'Séance simple', 'maxlength' => 40],
+                                ],
+                                [
+                                    'name' => 'prix',
+                                    'type' => 'text',
+                                    'label' => 'Prix',
+                                    'required' => true,
+                                    'width' => '1-2',
+                                    'opts' => ['placeholder' => '13 €', 'maxlength' => 20],
+                                ],
+                                [
+                                    'name' => 'precision',
+                                    'type' => 'text',
+                                    'label' => 'Précision',
+                                    'info' => 'Facultatif, affichée en petit sous l’intitulé : « sur justificatif », « par mois »…',
+                                    'width' => '1-2',
+                                    'opts' => ['maxlength' => 60],
+                                ],
+                                [
+                                    'name' => 'miseEnAvant',
+                                    'type' => 'boolean',
+                                    'label' => 'Mettre en avant',
+                                    'info' => 'Surligne la ligne en orange.',
+                                    'width' => '1-2',
+                                    'opts' => ['default' => false],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'name' => 'reprendre',
+                        'type' => 'contentItemLink',
+                        'label' => 'Reprendre les tarifs d’une autre page',
+                        'info' => 'Facultatif. Choisir la page « Tarifs » pour afficher ici les mêmes lignes : '
+                            .'les prix ne se saisissent alors qu’à un seul endroit. Les lignes ci-dessus sont ignorées.',
+                        'width' => '1-1',
+                        'condition' => $isTarifs,
+                        'opts' => ['link' => 'pages', 'display' => '${data.titre || \'Page sans titre\'}'],
+                    ],
+
+                    // ── Planning ────────────────────────────────────────
+                    [
+                        'name' => 'creneaux',
+                        'type' => 'set',
+                        'label' => 'Créneaux de la semaine',
+                        'info' => 'Cours et créneaux réservés. Le reste des horaires d’ouverture (« Identité du site ») '
+                            .'s’affiche de lui-même en accès libre.',
+                        'multiple' => true,
+                        'width' => '1-1',
+                        'condition' => $isPlanning,
+                        'opts' => [
+                            'display' => '${data.jour || \'Jour\'} ${data.debut || \'\'} ${data.libelle || data.categorie || \'Créneau\'}',
+                            'fields' => [
+                                [
+                                    'name' => 'jour',
+                                    'type' => 'select',
+                                    'label' => 'Jour',
+                                    'required' => true,
+                                    'width' => '1-3',
+                                    'opts' => ['options' => $jours],
+                                ],
+                                [
+                                    'name' => 'debut',
+                                    'type' => 'text',
+                                    'label' => 'Début',
+                                    'required' => true,
+                                    'info' => 'Par exemple 14h ou 15h30.',
+                                    'width' => '1-3',
+                                    'opts' => ['placeholder' => '14h', 'maxlength' => 5],
+                                ],
+                                [
+                                    'name' => 'fin',
+                                    'type' => 'text',
+                                    'label' => 'Fin',
+                                    'required' => true,
+                                    'width' => '1-3',
+                                    'opts' => ['placeholder' => '15h30', 'maxlength' => 5],
+                                ],
+                                [
+                                    'name' => 'categorie',
+                                    'type' => 'select',
+                                    'label' => 'Genre de créneau',
+                                    'info' => 'Donne la couleur du créneau.',
+                                    'required' => true,
+                                    'width' => '1-3',
+                                    'opts' => [
+                                        'options' => [
+                                            ['value' => 'enfants', 'label' => 'Cours enfants'],
+                                            ['value' => 'adultes', 'label' => 'Cours adultes'],
+                                            ['value' => 'clubs', 'label' => 'Créneau réservé'],
+                                            ['value' => 'evenement', 'label' => 'Événement'],
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'name' => 'libelle',
+                                    'type' => 'text',
+                                    'label' => 'Intitulé',
+                                    'info' => 'Vide, le genre de créneau est repris.',
+                                    'width' => '1-3',
+                                    'opts' => ['maxlength' => 40],
+                                ],
+                                [
+                                    'name' => 'precision',
+                                    'type' => 'text',
+                                    'label' => 'Précision',
+                                    'info' => 'Âge, niveau : « 6-9 ans », « tous niveaux ».',
+                                    'width' => '1-3',
+                                    'opts' => ['maxlength' => 40],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    [
+                        'name' => 'note',
+                        'type' => 'text',
+                        'label' => 'Note',
+                        'info' => 'Facultatif, affichée en petit sous la section.',
+                        'width' => '1-1',
+                        'condition' => $hasNote,
+                        'opts' => ['multiline' => true, 'maxlength' => 300],
+                    ],
+
+                    // ── L’essentiel ─────────────────────────────────────
+                    [
+                        'name' => 'liens',
+                        'type' => 'set',
+                        'label' => 'Liens',
+                        'info' => 'Affichés en boutons sous les horaires.',
+                        'multiple' => true,
+                        'width' => '1-1',
+                        'condition' => $isEssentiel,
+                        'opts' => [
+                            'display' => '${data.texte || \'Lien\'}',
+                            'fields' => [
+                                [
+                                    'name' => 'texte',
+                                    'type' => 'text',
+                                    'label' => 'Texte du lien',
+                                    'required' => true,
+                                    'width' => '1-2',
+                                    'opts' => ['maxlength' => 40],
+                                ],
+                                [
+                                    'name' => 'adresse',
+                                    'type' => 'text',
+                                    'label' => 'Adresse',
+                                    'required' => true,
+                                    'width' => '1-2',
+                                    'opts' => ['placeholder' => '/planning'],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ── Chiffres clés ───────────────────────────────────
+                    [
+                        'name' => 'chiffres',
+                        'type' => 'set',
+                        'label' => 'Chiffres',
+                        'info' => 'Trois ou quatre chiffres, affichés en grand.',
+                        'multiple' => true,
+                        'width' => '1-1',
+                        'condition' => $isChiffres,
+                        'opts' => [
+                            'display' => '${data.valeur || \'Chiffre\'} ${data.libelle || \'\'}',
+                            'fields' => [
+                                [
+                                    'name' => 'valeur',
+                                    'type' => 'text',
+                                    'label' => 'Valeur',
+                                    'required' => true,
+                                    'width' => '1-2',
+                                    'opts' => ['placeholder' => '250', 'maxlength' => 12],
+                                ],
+                                [
+                                    'name' => 'libelle',
+                                    'type' => 'text',
+                                    'label' => 'Ce qu’elle compte',
+                                    'required' => true,
+                                    'width' => '1-2',
+                                    'opts' => ['placeholder' => 'blocs', 'maxlength' => 40],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ── Espaces ─────────────────────────────────────────
+                    [
+                        'name' => 'cartes',
+                        'type' => 'set',
+                        'label' => 'Espaces',
+                        'info' => 'Un espace par carte. La photo est facultative : elle se remplace à tout moment.',
+                        'multiple' => true,
+                        'width' => '1-1',
+                        'condition' => $isEspaces,
+                        'opts' => [
+                            'display' => '${data.titre || \'Espace\'}',
+                            'fields' => [
+                                [
+                                    'name' => 'titre',
+                                    'type' => 'text',
+                                    'label' => 'Nom de l’espace',
+                                    'required' => true,
+                                    'width' => '1-1',
+                                    'opts' => ['maxlength' => 50],
+                                ],
+                                [
+                                    'name' => 'texte',
+                                    'type' => 'text',
+                                    'label' => 'Description',
+                                    'width' => '1-1',
+                                    'opts' => ['multiline' => true, 'maxlength' => 300],
+                                ],
+                                [
+                                    'name' => 'image',
+                                    'type' => 'asset',
+                                    'label' => 'Photo',
+                                    'width' => '1-2',
+                                    'opts' => ['filter' => ['type' => 'image']],
+                                ],
+                                [
+                                    'name' => 'alt',
+                                    'type' => 'text',
+                                    'label' => 'Description de la photo',
+                                    'info' => 'Obligatoire dès qu’une photo est choisie.',
+                                    'width' => '1-2',
+                                    'opts' => ['maxlength' => 150],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ── Questions fréquentes ────────────────────────────
+                    [
+                        'name' => 'questions',
+                        'type' => 'set',
+                        'label' => 'Questions',
+                        'multiple' => true,
+                        'width' => '1-1',
+                        'condition' => $isQuestions,
+                        'opts' => [
+                            'display' => '${data.question || \'Question\'}',
+                            'fields' => [
+                                [
+                                    'name' => 'question',
+                                    'type' => 'text',
+                                    'label' => 'Question',
+                                    'required' => true,
+                                    'width' => '1-1',
+                                    'opts' => ['maxlength' => 100],
+                                ],
+                                [
+                                    'name' => 'reponse',
+                                    'type' => 'text',
+                                    'label' => 'Réponse',
+                                    'required' => true,
+                                    'width' => '1-1',
+                                    'opts' => ['multiline' => true, 'maxlength' => 500],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],

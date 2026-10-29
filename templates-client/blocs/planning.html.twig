@@ -1,0 +1,213 @@
+{# Planning de la semaine.
+
+   Le client ne saisit que les créneaux particuliers — cours, créneau réservé —
+   et les horaires d'ouverture de l'identité du site. Le reste de chaque
+   journée se remplit tout seul en « accès libre » : un changement d'horaire
+   ne se saisit qu'à un endroit, et le planning ne peut pas contredire les
+   horaires affichés dans le pied de page.
+
+   Une seule structure pour tous les écrans :
+     · sur ordinateur, sept colonnes alignées sur une échelle d'heures ; la
+       hauteur d'un créneau suit sa durée (classes planning__segment--dN,
+       N demi-heures) ;
+     · sur téléphone, une journée par ligne, les créneaux à la suite.
+
+   Aucun style dans la page : la politique de contenu du site refuse les
+   attributs style, d'où les classes de durée. #}
+
+{% import _self as outils %}
+
+{# Minutes depuis minuit pour « 14h », « 15h30 », « 09:00 » ; vide sinon.
+   Une macro rend du texte balisé : l'appelant le reconvertit en chaîne
+   (« ~ '' ») avant tout calcul. #}
+{% macro minutes(texte) %}
+    {%- set t = texte|default('')|lower|replace({' ': '', ':': 'h', '.': 'h'}) -%}
+    {%- if t matches '/^\\d{1,2}h?(\\d{2})?$/' -%}
+        {%- set p = t|split('h') -%}
+        {{- p[0] * 60 + (p[1]|default('') ?: 0) -}}
+    {%- endif -%}
+{% endmacro %}
+
+{# « 14h », « 15h30 ». #}
+{% macro heure(m) %}{{ (m // 60) }}h{% if m % 60 %}{{ '%02d'|format(m % 60) }}{% endif %}{% endmacro %}
+
+{% set jours = {
+    'lundi': 'Lundi',
+    'mardi': 'Mardi',
+    'mercredi': 'Mercredi',
+    'jeudi': 'Jeudi',
+    'vendredi': 'Vendredi',
+    'samedi': 'Samedi',
+    'dimanche': 'Dimanche'
+} %}
+
+{% set categories = {
+    'enfants': 'Cours enfants',
+    'adultes': 'Cours adultes',
+    'clubs': 'Créneau réservé',
+    'evenement': 'Événement'
+} %}
+
+{# 1. Les créneaux saisis, ramenés en minutes. Un créneau illisible ou à
+      l'envers est écarté plutôt qu'affiché faux. #}
+{% set creneaux = [] %}
+{% for c in bloc.creneaux|default([]) %}
+    {% set debut = (outils.minutes(c.debut)|trim ~ '') %}
+    {% set fin = (outils.minutes(c.fin)|trim ~ '') %}
+    {% if c.jour in jours|keys and debut != '' and fin != '' and fin + 0 > debut + 0 %}
+        {% set categorie = c.categorie in categories|keys ? c.categorie : 'evenement' %}
+        {% set creneaux = creneaux|merge([{
+            jour: c.jour,
+            debut: debut + 0,
+            fin: fin + 0,
+            genre: categorie,
+            libelle: c.libelle ?: categories[categorie],
+            precision: c.precision|default('')
+        }]) %}
+    {% endif %}
+{% endfor %}
+
+{# 2. Les horaires d'ouverture de chaque jour, lus dans l'identité du site
+      (« 12h – 23h »). Un horaire en plusieurs plages ou illisible n'est pas
+      deviné : le jour affiche alors ses créneaux, sans accès libre calculé. #}
+{% set ouvertures = {} %}
+{% set debutGrille = 24 * 60 %}
+{% set finGrille = 0 %}
+{% for cle, libelle in jours %}
+    {% set texte = site.horaires[cle]|default('')|trim %}
+    {% set plage = texte|replace({'–': '-', '—': '-', ' à ': '-'})|split('-') %}
+    {% set o = plage|length == 2 ? (outils.minutes(plage[0])|trim ~ '') : '' %}
+    {% set f = plage|length == 2 ? (outils.minutes(plage[1])|trim ~ '') : '' %}
+    {% if o != '' and f != '' and f + 0 > o + 0 %}
+        {% set ouvertures = ouvertures|merge({(cle): {debut: o + 0, fin: f + 0}}) %}
+        {% set debutGrille = min(debutGrille, o + 0) %}
+        {% set finGrille = max(finGrille, f + 0) %}
+    {% endif %}
+{% endfor %}
+{% for c in creneaux %}
+    {% set debutGrille = min(debutGrille, c.debut) %}
+    {% set finGrille = max(finGrille, c.fin) %}
+{% endfor %}
+
+{# L'échelle commence et finit sur une heure pleine. #}
+{% set debutGrille = (debutGrille // 60) * 60 %}
+{% set finGrille = ((finGrille + 59) // 60) * 60 %}
+{% set grille = finGrille > debutGrille %}
+
+<section class="bloc bloc-planning">
+
+    {% if titre %}
+        <h{{ niveau }}>{{ titre }}</h{{ niveau }}>
+    {% endif %}
+
+    {% if bloc.introduction %}
+        <p class="bloc-planning__introduction">{{ bloc.introduction }}</p>
+    {% endif %}
+
+    <ul class="planning-legende" aria-label="Légende">
+        <li class="planning-legende__entree planning-legende__entree--libre">Accès libre</li>
+        {% for genre, libelle in categories %}
+            {% if creneaux|filter(c => c.genre == genre) is not empty %}
+                <li class="planning-legende__entree planning-legende__entree--{{ genre }}">{{ libelle }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <div class="planning{% if grille %} planning--grille{% endif %}">
+
+        {% if grille %}
+            {# Échelle des heures, pour l'œil seulement : chaque créneau dit
+               lui-même ses heures. #}
+            <div class="planning__echelle" aria-hidden="true">
+                {% for h in (debutGrille // 60)..((finGrille // 60) - 1) %}
+                    <span class="planning__graduation">{{ h }}h</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% for cle, libelle in jours %}
+            {% set ouverture = ouvertures[cle] ?? null %}
+            {% set duJour = creneaux|filter(c => c.jour == cle)|sort((a, b) => a.debut <=> b.debut) %}
+            {% set texteHoraires = site.horaires[cle]|default('')|trim %}
+
+            {# 3. La journée découpée en segments successifs : fermé, accès
+                  libre, créneaux. #}
+            {% set segments = [] %}
+            {% set curseur = debutGrille %}
+
+            {% if ouverture %}
+                {% if ouverture.debut > curseur %}
+                    {% set segments = segments|merge([{genre: 'ferme', debut: curseur, fin: ouverture.debut}]) %}
+                {% endif %}
+                {% set curseur = ouverture.debut %}
+            {% endif %}
+
+            {% for c in duJour %}
+                {% set debut = max(c.debut, curseur) %}
+                {% set fin = ouverture ? min(c.fin, ouverture.fin) : c.fin %}
+                {% if fin > debut %}
+                    {% if debut > curseur %}
+                        {% set segments = segments|merge([{
+                            genre: ouverture ? 'libre' : 'vide',
+                            debut: curseur,
+                            fin: debut
+                        }]) %}
+                    {% endif %}
+                    {% set segments = segments|merge([c|merge({debut: debut, fin: fin})]) %}
+                    {% set curseur = fin %}
+                {% endif %}
+            {% endfor %}
+
+            {% if ouverture and ouverture.fin > curseur %}
+                {% set segments = segments|merge([{genre: 'libre', debut: curseur, fin: ouverture.fin}]) %}
+                {% set curseur = ouverture.fin %}
+            {% endif %}
+
+            {% if finGrille > curseur %}
+                {% set segments = segments|merge([{
+                    genre: ouverture or segments is not empty ? 'ferme' : 'ferme-jour',
+                    debut: curseur,
+                    fin: finGrille
+                }]) %}
+            {% endif %}
+
+            <section class="planning__jour">
+                <h{{ niveau + 1 }} class="planning__nom">
+                    {{ libelle }}
+                    <span class="planning__ouverture">{{ texteHoraires ?: 'Fermé' }}</span>
+                </h{{ niveau + 1 }}>
+
+                <ol class="planning__segments">
+                    {% for s in segments %}
+                        {% set demiHeures = max(1, min((s.fin - s.debut) // 30, 36)) %}
+                        {# Les heures de fermeture ne sont là que pour aligner les colonnes : le
+                           titre du jour donne déjà les horaires. #}
+                        {% set ferme = s.genre in ['ferme', 'ferme-jour', 'vide'] %}
+                        <li class="planning__segment planning__segment--{{ s.genre }} planning__segment--d{{ demiHeures }}"
+                            {%- if ferme %} aria-hidden="true"{% endif %}>
+                            {% if s.genre == 'ferme-jour' %}
+                                <span class="planning__libelle">Fermé</span>
+                            {% elseif not ferme %}
+                                <span class="planning__heures">{{ outils.heure(s.debut) }} – {{ outils.heure(s.fin) }}</span>
+                                <span class="planning__libelle">{{ s.genre == 'libre' ? 'Accès libre' : s.libelle }}</span>
+                                {% if s.precision|default('') %}
+                                    <span class="planning__precision">{{ s.precision }}</span>
+                                {% endif %}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ol>
+            </section>
+        {% endfor %}
+
+    </div>
+
+    {% if bloc.note %}
+        <p class="bloc-planning__note">{{ bloc.note }}</p>
+    {% endif %}
+
+    {% if bloc.boutonTexte and bloc.boutonLien %}
+        <p><a class="bouton" href="{{ bloc.boutonLien }}">{{ bloc.boutonTexte }}</a></p>
+    {% endif %}
+
+</section>

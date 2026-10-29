@@ -1,0 +1,20 @@
+{# Chiffres clés, affichés en grand : surface, nombre de blocs, rotation. #}
+
+<section class="bloc bloc-chiffres">
+
+    {% if titre %}
+        <h{{ niveau }}>{{ titre }}</h{{ niveau }}>
+    {% endif %}
+
+    {% if bloc.chiffres is not empty %}
+        <ul class="chiffres">
+            {% for chiffre in bloc.chiffres %}
+                <li class="chiffre">
+                    <span class="chiffre__valeur">{{ chiffre.valeur }}</span>
+                    <span class="chiffre__libelle">{{ chiffre.libelle }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</section>

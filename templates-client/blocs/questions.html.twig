@@ -1,0 +1,25 @@
+{# Questions fréquentes, toutes ouvertes : sur un téléphone, faire défiler
+   coûte moins que toucher chaque question pour lire sa réponse. #}
+
+<section class="bloc bloc-questions">
+
+    {% if titre %}
+        <h{{ niveau }}>{{ titre }}</h{{ niveau }}>
+    {% endif %}
+
+    {% if bloc.introduction %}
+        <p class="bloc-questions__introduction">{{ bloc.introduction }}</p>
+    {% endif %}
+
+    {% if bloc.questions is not empty %}
+        <div class="questions">
+            {% for q in bloc.questions %}
+                <div class="question">
+                    <h{{ niveau + 1 }} class="question__intitule">{{ q.question }}</h{{ niveau + 1 }}>
+                    <p class="question__reponse">{{ q.reponse|nl2br }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</section>

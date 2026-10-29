@@ -1,0 +1,29 @@
+{# Annonce : offre de lancement, fermeture exceptionnelle, changement d'horaires.
+
+   Se retire du site en décochant « Afficher l'annonce » : le texte reste en
+   place pour la prochaine fois, rien n'est à ressaisir.
+
+   Deux tons. L'orange porte un texte noir, jamais blanc : l'orange du logo est
+   trop clair pour un texte blanc lisible. #}
+
+{% set ton = bloc.ton|default('offre') == 'alerte' ? 'alerte' : 'offre' %}
+
+{% if bloc.actif is not same as(false) and (titre or bloc.message) %}
+    <aside class="bloc bloc-annonce bloc-annonce--{{ ton }}"{% if not titre %} aria-label="Annonce"{% endif %}>
+
+        <div class="bloc-annonce__texte">
+            {% if titre %}
+                <h{{ niveau }} class="bloc-annonce__titre">{{ titre }}</h{{ niveau }}>
+            {% endif %}
+
+            {% if bloc.message %}
+                <p class="bloc-annonce__message">{{ bloc.message|nl2br }}</p>
+            {% endif %}
+        </div>
+
+        {% if bloc.boutonTexte and bloc.boutonLien %}
+            <p class="bloc-annonce__action"><a class="bouton" href="{{ bloc.boutonLien }}">{{ bloc.boutonTexte }}</a></p>
+        {% endif %}
+
+    </aside>
+{% endif %}
