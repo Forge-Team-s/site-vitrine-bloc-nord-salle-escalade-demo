@@ -32,7 +32,6 @@ $hasTexte = "['texte-image', 'contact', 'formulaire'].includes(data.type)";
 $isTarifs = "data.type === 'tarifs'";
 $isPlanning = "data.type === 'planning'";
 $isEssentiel = "data.type === 'essentiel'";
-$isChiffres = "data.type === 'chiffres'";
 $isEspaces = "data.type === 'espaces'";
 $isQuestions = "data.type === 'questions'";
 $hasIntroduction = "['temoignages', 'tarifs', 'planning', 'espaces', 'questions'].includes(data.type)";
@@ -116,7 +115,6 @@ return [
                                 ['value' => 'tarifs', 'label' => 'Tarifs'],
                                 ['value' => 'planning', 'label' => 'Planning de la semaine'],
                                 ['value' => 'essentiel', 'label' => 'L’essentiel : horaires et accès'],
-                                ['value' => 'chiffres', 'label' => 'Chiffres clés'],
                                 ['value' => 'espaces', 'label' => 'Espaces de la salle'],
                                 ['value' => 'questions', 'label' => 'Questions fréquentes'],
                             ],
@@ -443,38 +441,6 @@ return [
                                     'required' => true,
                                     'width' => '1-2',
                                     'opts' => ['placeholder' => '/planning'],
-                                ],
-                            ],
-                        ],
-                    ],
-
-                    // ── Chiffres clés ───────────────────────────────────
-                    [
-                        'name' => 'chiffres',
-                        'type' => 'set',
-                        'label' => 'Chiffres',
-                        'info' => 'Trois ou quatre chiffres, affichés en grand.',
-                        'multiple' => true,
-                        'width' => '1-1',
-                        'condition' => $isChiffres,
-                        'opts' => [
-                            'display' => '${data.valeur || \'Chiffre\'} ${data.libelle || \'\'}',
-                            'fields' => [
-                                [
-                                    'name' => 'valeur',
-                                    'type' => 'text',
-                                    'label' => 'Valeur',
-                                    'required' => true,
-                                    'width' => '1-2',
-                                    'opts' => ['placeholder' => '250', 'maxlength' => 12],
-                                ],
-                                [
-                                    'name' => 'libelle',
-                                    'type' => 'text',
-                                    'label' => 'Ce qu’elle compte',
-                                    'required' => true,
-                                    'width' => '1-2',
-                                    'opts' => ['placeholder' => 'blocs', 'maxlength' => 40],
                                 ],
                             ],
                         ],
