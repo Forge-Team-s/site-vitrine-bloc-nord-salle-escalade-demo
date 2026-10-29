@@ -931,3 +931,70 @@ button.bouton:hover {
 .bandeau-demo__lien:focus-visible {
     outline-color: var(--bn-noir);
 }
+
+/* ── Plan de la salle ─────────────────────────────────────────────────── */
+
+.bloc-plan-salle__introduction {
+    max-width: 44rem;
+}
+
+.bloc-plan-salle__contenu {
+    display: grid;
+    gap: 1.5rem 2.5rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 60rem) {
+    .bloc-plan-salle__contenu {
+        grid-template-columns: 3fr 2fr;
+        align-items: start;
+    }
+}
+
+.bloc-plan-salle__plan {
+    display: block;
+    width: 100%;
+    border: 2px solid var(--bn-noir);
+}
+
+.reperes {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.repere {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+}
+
+.repere__numero {
+    flex: 0 0 4.5rem;
+    white-space: nowrap;
+    padding: 0.2rem 0.4rem;
+    background: var(--bn-orange);
+    color: var(--bn-noir);          /* 6,6:1 */
+    font-weight: 900;
+    text-align: center;
+}
+
+.repere__numero--espace {
+    margin-top: 0.65rem;
+    height: 0.35rem;
+    padding: 0;
+    background: var(--bn-noir);
+}
+
+.repere__nom {
+    display: block;
+    font-weight: 700;
+}
+
+.repere__description {
+    display: block;
+    color: var(--couleur-texte-doux);
+    font-size: 0.9375rem;
+}

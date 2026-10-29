@@ -415,6 +415,22 @@ enregistrerPage($content, [
                 ],
             ],
         ],
+        [
+            'type' => 'plan-salle',
+            'titre' => 'Le plan',
+            'introduction' => 'Quatorze zones de bloc le long des murs et sous le toit central, les espaces autour.',
+            'image' => $images['plan'],
+            'alt' => 'Plan de la salle : zones de bloc 1 à 12 le long des murs, 13 et 14 au centre, zone enfants, zone débutant, coin détente, accueil, vestiaires et espace entraînement',
+            'reperes' => [
+                ['numero' => '1-7', 'nom' => 'Mur nord', 'description' => 'Dévers et dalle, tous niveaux.'],
+                ['numero' => '8-10', 'nom' => 'Mur est', 'description' => 'Grands dévers.'],
+                ['numero' => '11-12', 'nom' => 'Mur ouest', 'description' => 'Dalle, près de la zone débutant.'],
+                ['numero' => '13-14', 'nom' => 'Toit central', 'description' => 'Le bloc le plus déversant de la salle.'],
+                ['numero' => '', 'nom' => 'Zone enfants et zone débutant', 'description' => 'À gauche en entrant.'],
+                ['numero' => '', 'nom' => 'Accueil, vestiaires, coin détente', 'description' => 'Face à l’entrée, à droite.'],
+                ['numero' => '', 'nom' => 'Espace entraînement', 'description' => 'Pan Güllich et poutres, près des vestiaires.'],
+            ],
+        ],
     ],
 ]);
 

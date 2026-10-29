@@ -1,0 +1,46 @@
+{# Plan de la salle : le plan en image, la légende en liste.
+
+   La légende n'est pas un doublon de l'image : c'est elle que lit un lecteur
+   d'écran, et elle qui reste lisible quand le plan tient dans la largeur d'un
+   téléphone. #}
+
+<section class="bloc bloc-plan-salle">
+
+    {% if titre %}
+        <h{{ niveau }}>{{ titre }}</h{{ niveau }}>
+    {% endif %}
+
+    {% if bloc.introduction %}
+        <p class="bloc-plan-salle__introduction">{{ bloc.introduction }}</p>
+    {% endif %}
+
+    <div class="bloc-plan-salle__contenu">
+        {% include 'partials/image.html.twig' with {
+            asset: bloc.image,
+            alt: bloc.alt,
+            classe: 'bloc-plan-salle__plan',
+            sizes: '(min-width: 60rem) 40rem, 100vw'
+        } only %}
+
+        {% if bloc.reperes is not empty %}
+            <ul class="reperes">
+                {% for repere in bloc.reperes %}
+                    <li class="repere">
+                        {% if repere.numero %}
+                            <span class="repere__numero">{{ repere.numero }}</span>
+                        {% else %}
+                            <span class="repere__numero repere__numero--espace" aria-hidden="true"></span>
+                        {% endif %}
+                        <span class="repere__texte">
+                            <span class="repere__nom">{{ repere.nom }}</span>
+                            {% if repere.description %}
+                                <span class="repere__description">{{ repere.description }}</span>
+                            {% endif %}
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+</section>
