@@ -29,7 +29,6 @@ $hasImage = "['hero', 'texte-image'].includes(data.type)";
 $hasTexte = "['texte-image', 'contact', 'formulaire'].includes(data.type)";
 
 // Sections propres à Bloc Nord, rendues par templates-client/blocs/.
-$isAnnonce = "data.type === 'annonce'";
 $isTarifs = "data.type === 'tarifs'";
 $isPlanning = "data.type === 'planning'";
 $isEssentiel = "data.type === 'essentiel'";
@@ -37,7 +36,7 @@ $isChiffres = "data.type === 'chiffres'";
 $isEspaces = "data.type === 'espaces'";
 $isQuestions = "data.type === 'questions'";
 $hasIntroduction = "['temoignages', 'tarifs', 'planning', 'espaces', 'questions'].includes(data.type)";
-$hasBouton = "['hero', 'annonce', 'tarifs', 'planning'].includes(data.type)";
+$hasBouton = "['hero', 'tarifs', 'planning'].includes(data.type)";
 $hasNote = "['tarifs', 'planning'].includes(data.type)";
 $hasHoraires = "['contact', 'essentiel'].includes(data.type)";
 
@@ -114,7 +113,6 @@ return [
                                 ['value' => 'contact', 'label' => 'Coordonnées'],
                                 ['value' => 'formulaire', 'label' => 'Formulaire de contact'],
                                 ['value' => 'temoignages', 'label' => 'Témoignages'],
-                                ['value' => 'annonce', 'label' => 'Annonce (offre, fermeture exceptionnelle)'],
                                 ['value' => 'tarifs', 'label' => 'Tarifs'],
                                 ['value' => 'planning', 'label' => 'Planning de la semaine'],
                                 ['value' => 'essentiel', 'label' => 'L’essentiel : horaires et accès'],
@@ -274,39 +272,6 @@ return [
                         'width' => '1-1',
                         'condition' => $hasHoraires,
                         'opts' => ['default' => true],
-                    ],
-
-                    // ── Annonce ─────────────────────────────────────────
-                    [
-                        'name' => 'actif',
-                        'type' => 'boolean',
-                        'label' => 'Afficher l’annonce',
-                        'info' => 'Décocher pour la retirer du site sans l’effacer : il suffira de la recocher la prochaine fois.',
-                        'width' => '1-2',
-                        'condition' => $isAnnonce,
-                        'opts' => ['default' => true],
-                    ],
-                    [
-                        'name' => 'ton',
-                        'type' => 'select',
-                        'label' => 'Genre d’annonce',
-                        'width' => '1-2',
-                        'condition' => $isAnnonce,
-                        'opts' => [
-                            'options' => [
-                                ['value' => 'offre', 'label' => 'Offre ou nouvelle (orange)'],
-                                ['value' => 'alerte', 'label' => 'Fermeture ou changement d’horaires (noir)'],
-                            ],
-                        ],
-                    ],
-                    [
-                        'name' => 'message',
-                        'type' => 'text',
-                        'label' => 'Message',
-                        'info' => 'Une ou deux phrases. Exemple : « Salle fermée le 1er mai. »',
-                        'width' => '1-1',
-                        'condition' => $isAnnonce,
-                        'opts' => ['multiline' => true, 'maxlength' => 220],
                     ],
 
                     // ── Tarifs ──────────────────────────────────────────
