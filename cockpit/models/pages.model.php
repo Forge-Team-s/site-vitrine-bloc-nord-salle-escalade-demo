@@ -31,8 +31,7 @@ $hasTexte = "['texte-image', 'contact', 'formulaire'].includes(data.type)";
 // Sections propres à Bloc Nord, rendues par templates-client/blocs/.
 $isTarifs = "data.type === 'tarifs'";
 $isPlanning = "data.type === 'planning'";
-$isQuestions = "data.type === 'questions'";
-$hasIntroduction = "['temoignages', 'tarifs', 'planning', 'questions'].includes(data.type)";
+$hasIntroduction = "['temoignages', 'tarifs', 'planning'].includes(data.type)";
 $hasBouton = "['hero', 'tarifs', 'planning'].includes(data.type)";
 $hasNote = "['tarifs', 'planning'].includes(data.type)";
 $hasHoraires = "['contact'].includes(data.type)";
@@ -112,7 +111,6 @@ return [
                                 ['value' => 'temoignages', 'label' => 'Témoignages'],
                                 ['value' => 'tarifs', 'label' => 'Tarifs'],
                                 ['value' => 'planning', 'label' => 'Planning de la semaine'],
-                                ['value' => 'questions', 'label' => 'Questions fréquentes'],
                             ],
                         ],
                     ],
@@ -410,36 +408,6 @@ return [
                         'opts' => ['multiline' => true, 'maxlength' => 300],
                     ],
 
-                    // ── Questions fréquentes ────────────────────────────
-                    [
-                        'name' => 'questions',
-                        'type' => 'set',
-                        'label' => 'Questions',
-                        'multiple' => true,
-                        'width' => '1-1',
-                        'condition' => $isQuestions,
-                        'opts' => [
-                            'display' => '${data.question || \'Question\'}',
-                            'fields' => [
-                                [
-                                    'name' => 'question',
-                                    'type' => 'text',
-                                    'label' => 'Question',
-                                    'required' => true,
-                                    'width' => '1-1',
-                                    'opts' => ['maxlength' => 100],
-                                ],
-                                [
-                                    'name' => 'reponse',
-                                    'type' => 'text',
-                                    'label' => 'Réponse',
-                                    'required' => true,
-                                    'width' => '1-1',
-                                    'opts' => ['multiline' => true, 'maxlength' => 500],
-                                ],
-                            ],
-                        ],
-                    ],
                 ],
             ],
         ],
