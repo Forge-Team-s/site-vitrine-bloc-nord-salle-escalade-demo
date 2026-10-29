@@ -31,12 +31,11 @@ $hasTexte = "['texte-image', 'contact', 'formulaire'].includes(data.type)";
 // Sections propres à Bloc Nord, rendues par templates-client/blocs/.
 $isTarifs = "data.type === 'tarifs'";
 $isPlanning = "data.type === 'planning'";
-$isEssentiel = "data.type === 'essentiel'";
 $isQuestions = "data.type === 'questions'";
 $hasIntroduction = "['temoignages', 'tarifs', 'planning', 'questions'].includes(data.type)";
 $hasBouton = "['hero', 'tarifs', 'planning'].includes(data.type)";
 $hasNote = "['tarifs', 'planning'].includes(data.type)";
-$hasHoraires = "['contact', 'essentiel'].includes(data.type)";
+$hasHoraires = "['contact'].includes(data.type)";
 
 $jours = [
     ['value' => 'lundi', 'label' => 'Lundi'],
@@ -113,7 +112,6 @@ return [
                                 ['value' => 'temoignages', 'label' => 'Témoignages'],
                                 ['value' => 'tarifs', 'label' => 'Tarifs'],
                                 ['value' => 'planning', 'label' => 'Planning de la semaine'],
-                                ['value' => 'essentiel', 'label' => 'L’essentiel : horaires et accès'],
                                 ['value' => 'questions', 'label' => 'Questions fréquentes'],
                             ],
                         ],
@@ -410,38 +408,6 @@ return [
                         'width' => '1-1',
                         'condition' => $hasNote,
                         'opts' => ['multiline' => true, 'maxlength' => 300],
-                    ],
-
-                    // ── L’essentiel ─────────────────────────────────────
-                    [
-                        'name' => 'liens',
-                        'type' => 'set',
-                        'label' => 'Liens',
-                        'info' => 'Affichés en boutons sous les horaires.',
-                        'multiple' => true,
-                        'width' => '1-1',
-                        'condition' => $isEssentiel,
-                        'opts' => [
-                            'display' => '${data.texte || \'Lien\'}',
-                            'fields' => [
-                                [
-                                    'name' => 'texte',
-                                    'type' => 'text',
-                                    'label' => 'Texte du lien',
-                                    'required' => true,
-                                    'width' => '1-2',
-                                    'opts' => ['maxlength' => 40],
-                                ],
-                                [
-                                    'name' => 'adresse',
-                                    'type' => 'text',
-                                    'label' => 'Adresse',
-                                    'required' => true,
-                                    'width' => '1-2',
-                                    'opts' => ['placeholder' => '/planning'],
-                                ],
-                            ],
-                        ],
                     ],
 
                     // ── Questions fréquentes ────────────────────────────
