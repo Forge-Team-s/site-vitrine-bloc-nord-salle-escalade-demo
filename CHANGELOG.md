@@ -12,6 +12,18 @@ qu'il prend pour un socle recopié chez chaque client :
 La version installée est inscrite dans le fichier `VERSION`, à la racine. La procédure de
 fusion est dans [docs/mise-a-jour-socle.md](docs/mise-a-jour-socle.md).
 
+## 2.2.1 — 2026-10-12
+
+Les six modèles de contenu déclaraient `'localize' => false` sur 42 champs. Cockpit ne lit pas
+cette clé : celle qu'il lit pour un champ traduisible est `i18n`.
+
+**`cockpit/models/*.model.php`** n'en portent plus. Le comportement ne change pas, la valeur
+était `false` partout et le produit est en français seul. La clé laissait croire qu'un réglage
+de traduction était en place, et se recopiait dans chaque nouveau champ écrit sur le modèle d'un
+existant.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
 ## 2.2.0 — 2026-10-12
 
 Un type de section se déclarait à quatre endroits de `cockpit/models/pages.model.php` : une
