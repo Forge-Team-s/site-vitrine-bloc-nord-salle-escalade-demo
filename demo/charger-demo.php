@@ -289,6 +289,38 @@ enregistrerPage($content, [
             ],
         ],
         [
+            'type' => 'evenements',
+            'titre' => 'Prochains événements',
+            'evenements' => [
+                [
+                    'date' => '2027-03-06',
+                    'heure' => '18h',
+                    'genre' => 'soiree',
+                    'titre' => 'Soirée d’ouverture',
+                    'description' => 'Visite de la salle, premiers blocs et café offert.',
+                    'lien' => '/actualites/ouverture-debut-mars',
+                ],
+                [
+                    'date' => '2027-03-27',
+                    'heure' => '10h',
+                    'genre' => 'ouverture',
+                    'titre' => 'Nouveaux blocs sur le mur nord',
+                    'description' => 'Première rotation : zones 1 à 7 refaites.',
+                    'lien' => '',
+                ],
+                [
+                    'date' => '2027-04-17',
+                    'heure' => '14h',
+                    'genre' => 'competition',
+                    'titre' => 'Contest de printemps',
+                    'description' => 'Ouvert à tous les niveaux, sur inscription à l’accueil.',
+                    'lien' => '',
+                ],
+            ],
+            'boutonTexte' => 'Toutes les actualités',
+            'boutonLien' => '/actualites',
+        ],
+        [
             'type' => 'chiffres',
             'titre' => 'La salle en chiffres',
             'chiffres' => [

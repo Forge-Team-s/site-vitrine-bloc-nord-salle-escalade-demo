@@ -1110,3 +1110,92 @@ button.bouton:hover {
         content: "← ";
     }
 }
+
+/* ── Prochains événements ─────────────────────────────────────────────── */
+
+.visuellement-cache {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.bloc-evenements__introduction {
+    max-width: 44rem;
+}
+
+.evenements {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 0;
+    list-style: none;
+}
+
+@media (min-width: 48rem) {
+    .evenements {
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    }
+}
+
+.evenement {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 2px solid var(--bn-noir);
+}
+
+.evenement__date {
+    flex: 0 0 5rem;
+    padding: 0.5rem 0.25rem 0.6rem;
+    background: var(--bn-noir);
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.evenement--competition .evenement__date,
+.evenement--ouverture .evenement__date {
+    background: var(--bn-orange);
+    color: var(--bn-noir);          /* 6,6:1 */
+}
+
+.evenement__jour-semaine,
+.evenement__mois {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.evenement__jour {
+    display: block;
+    font-size: 2.25rem;
+    font-weight: 900;
+}
+
+.evenement__genre {
+    margin: 0;
+    color: var(--bn-gris-texte);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.evenement__titre {
+    margin: 0.15rem 0 0.35rem;
+    font-size: 1.125rem;
+}
+
+.evenement__description,
+.evenement__texte p:last-child {
+    margin: 0 0 0.35rem;
+}
+
+.bloc-evenements__vide {
+    color: var(--couleur-texte-doux);
+}
