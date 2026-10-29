@@ -998,3 +998,115 @@ button.bouton:hover {
     color: var(--couleur-texte-doux);
     font-size: 0.9375rem;
 }
+
+/* ── Niveaux de difficulté ────────────────────────────────────────────────
+   Chaque couleur porte le texte qui lui reste lisible (contrastes mesurés :
+   jaune 13,1 · vert 5,5 · orange 6,6 en noir ; bleu 5,7 · rouge 5,6 ·
+   violet 6,4 · noir 18,9 en blanc). */
+
+.bloc-niveaux__introduction {
+    max-width: 44rem;
+}
+
+.niveaux {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+@media (min-width: 48rem) {
+    .niveaux {
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+}
+
+.niveau {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+}
+
+@media (min-width: 48rem) {
+    .niveau {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}
+
+.niveau__couleur {
+    flex: 0 0 6.5rem;
+    padding: 0.55rem 0.5rem;
+    border: 2px solid var(--bn-noir);
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+@media (min-width: 48rem) {
+    .niveau__couleur {
+        flex: none;
+        padding: 1.4rem 0.5rem;
+        border-width: 2px 1px;
+    }
+
+    .niveau:first-child .niveau__couleur { border-left-width: 2px; }
+    .niveau:last-child .niveau__couleur { border-right-width: 2px; }
+}
+
+.niveau__couleur--jaune { background: #ffd23f; color: var(--bn-noir); }
+.niveau__couleur--vert { background: #2f9e5b; color: var(--bn-noir); }
+.niveau__couleur--orange { background: var(--bn-orange); color: var(--bn-noir); }
+.niveau__couleur--bleu { background: #2563c9; color: #ffffff; }
+.niveau__couleur--rouge { background: #c62828; color: #ffffff; }
+.niveau__couleur--violet { background: #7b3fbf; color: #ffffff; }
+.niveau__couleur--noir { background: var(--bn-noir); color: #ffffff; }
+.niveau__couleur--blanc { background: #ffffff; color: var(--bn-noir); }
+
+.niveau__cotation {
+    display: block;
+    font-size: 1.125rem;
+    font-weight: 900;
+}
+
+.niveau__description {
+    display: block;
+    color: var(--couleur-texte-doux);
+    font-size: 0.875rem;
+    line-height: 1.35;
+}
+
+@media (min-width: 48rem) {
+    .niveau__texte {
+        padding: 0 0.35rem;
+    }
+}
+
+.niveaux__sens {
+    display: none;
+}
+
+@media (min-width: 48rem) {
+    .niveaux__sens {
+        display: flex;
+        justify-content: space-between;
+        margin: 0.75rem 0 0;
+        color: var(--bn-gris-texte);
+        font-size: 0.875rem;
+        font-weight: 700;
+    }
+
+    .niveaux__sens span:last-child::after {
+        content: " →";
+    }
+
+    .niveaux__sens span:first-child::before {
+        content: "← ";
+    }
+}

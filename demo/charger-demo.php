@@ -470,6 +470,19 @@ enregistrerPage($content, [
             ],
         ],
         [
+            'type' => 'niveaux',
+            'titre' => 'Quel bloc pour moi ?',
+            'introduction' => 'La couleur des prises donne le niveau du bloc. Commencez par le jaune, en zone débutant.',
+            'niveaux' => [
+                ['couleur' => 'jaune', 'cotation' => '3 à 4', 'description' => 'Première séance.'],
+                ['couleur' => 'vert', 'cotation' => '4 à 5a', 'description' => 'Après quelques séances.'],
+                ['couleur' => 'bleu', 'cotation' => '5a à 5c', 'description' => 'Grimpeur régulier.'],
+                ['couleur' => 'orange', 'cotation' => '6a à 6b', 'description' => 'Bonne technique.'],
+                ['couleur' => 'rouge', 'cotation' => '6b+ à 6c+', 'description' => 'Confirmé.'],
+                ['couleur' => 'noir', 'cotation' => '7a et plus', 'description' => 'Expert.'],
+            ],
+        ],
+        [
             'type' => 'texte-image',
             'titre' => 'Location de chaussons',
             'texte' => '<p>Toutes les pointures, à l’accueil, pour 4 € la séance.</p>'
