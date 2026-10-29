@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <title>Vestiaires de Bloc Nord</title>
+  <!-- Mur et sol -->
+  <rect width="1200" height="900" fill="#ece8e2"/>
+  <rect y="640" width="1200" height="260" fill="#8d8a86"/>
+  <polygon points="0,640 1200,640 1200,660 0,660" fill="#6f6c68"/>
+  <!-- Bande orange murale -->
+  <rect x="0" y="110" width="1200" height="26" fill="#ff6a13"/>
+  <!-- Casiers -->
+  <g>
+    <rect x="70" y="170" width="720" height="470" fill="#1d1d1d"/>
+    <g id="col">
+      <rect x="84" y="184" width="104" height="216" fill="#3fb4bc"/>
+      <rect x="84" y="412" width="104" height="216" fill="#2b2b2b"/>
+    </g>
+    <use href="#col" x="116"/>
+    <use href="#col" x="232"/>
+    <use href="#col" x="348"/>
+    <use href="#col" x="464"/>
+    <use href="#col" x="580"/>
+    <!-- Portes orange -->
+    <rect x="200" y="184" width="104" height="216" fill="#ff6a13"/>
+    <rect x="548" y="412" width="104" height="216" fill="#ff6a13"/>
+    <rect x="432" y="184" width="104" height="216" fill="#ff6a13"/>
+    <!-- Aérations, poignées, numéros -->
+    <g fill="#111111" opacity="0.35">
+      <rect x="100" y="204" width="72" height="5"/><rect x="100" y="216" width="72" height="5"/><rect x="100" y="228" width="72" height="5"/>
+      <rect x="216" y="204" width="72" height="5"/><rect x="216" y="216" width="72" height="5"/><rect x="216" y="228" width="72" height="5"/>
+      <rect x="332" y="204" width="72" height="5"/><rect x="332" y="216" width="72" height="5"/><rect x="332" y="228" width="72" height="5"/>
+      <rect x="448" y="204" width="72" height="5"/><rect x="448" y="216" width="72" height="5"/><rect x="448" y="228" width="72" height="5"/>
+      <rect x="564" y="204" width="72" height="5"/><rect x="564" y="216" width="72" height="5"/><rect x="564" y="228" width="72" height="5"/>
+      <rect x="680" y="204" width="72" height="5"/><rect x="680" y="216" width="72" height="5"/><rect x="680" y="228" width="72" height="5"/>
+    </g>
+    <g fill="#f3f1ee">
+      <circle cx="172" cy="300" r="7"/><circle cx="288" cy="300" r="7"/><circle cx="404" cy="300" r="7"/>
+      <circle cx="520" cy="300" r="7"/><circle cx="636" cy="300" r="7"/><circle cx="752" cy="300" r="7"/>
+      <circle cx="172" cy="528" r="7"/><circle cx="288" cy="528" r="7"/><circle cx="404" cy="528" r="7"/>
+      <circle cx="520" cy="528" r="7"/><circle cx="636" cy="528" r="7"/><circle cx="752" cy="528" r="7"/>
+    </g>
+  </g>
+  <!-- Banc en bois -->
+  <rect x="110" y="600" width="640" height="34" rx="4" fill="#c98a4b"/>
+  <rect x="110" y="600" width="640" height="10" rx="4" fill="#dca267"/>
+  <rect x="150" y="634" width="22" height="90" fill="#1d1d1d"/>
+  <rect x="690" y="634" width="22" height="90" fill="#1d1d1d"/>
+  <!-- Chaussons sur le banc -->
+  <g transform="translate(250 560)">
+    <path d="M0 40 Q10 10 50 8 L86 6 Q104 8 104 26 L104 40 Z" fill="#3fb4bc"/>
+    <path d="M0 40 L104 40 L104 34 Q60 28 0 34 Z" fill="#111111"/>
+    <rect x="30" y="14" width="40" height="8" fill="#ff6a13"/>
+  </g>
+  <g transform="translate(340 562)">
+    <path d="M0 38 Q10 10 50 8 L86 6 Q104 8 104 26 L104 38 Z" fill="#ff6a13"/>
+    <path d="M0 38 L104 38 L104 32 Q60 26 0 32 Z" fill="#111111"/>
+    <rect x="30" y="14" width="40" height="8" fill="#3fb4bc"/>
+  </g>
+  <!-- Sac -->
+  <g transform="translate(560 540)">
+    <rect x="0" y="12" width="150" height="70" rx="22" fill="#2b2b2b"/>
+    <rect x="0" y="36" width="150" height="14" fill="#3fb4bc"/>
+    <path d="M40 14 Q75 -20 110 14" stroke="#111111" stroke-width="9" fill="none"/>
+  </g>
+  <!-- Serviette suspendue -->
+  <rect x="816" y="190" width="12" height="12" fill="#1d1d1d"/>
+  <path d="M800 202 L846 202 L852 380 L794 380 Z" fill="#ff6a13"/>
+  <rect x="794" y="350" width="58" height="10" fill="#f3f1ee"/>
+  <!-- Douches -->
+  <rect x="880" y="140" width="320" height="500" fill="#d9e9ea"/>
+  <g stroke="#bcd3d5" stroke-width="3">
+    <line x1="880" y1="220" x2="1200" y2="220"/><line x1="880" y1="300" x2="1200" y2="300"/>
+    <line x1="880" y1="380" x2="1200" y2="380"/><line x1="880" y1="460" x2="1200" y2="460"/>
+    <line x1="880" y1="540" x2="1200" y2="540"/>
+    <line x1="960" y1="140" x2="960" y2="640"/><line x1="1040" y1="140" x2="1040" y2="640"/>
+    <line x1="1120" y1="140" x2="1120" y2="640"/>
+  </g>
+  <rect x="872" y="140" width="16" height="500" fill="#1d1d1d"/>
+  <g fill="#1d1d1d">
+    <rect x="1000" y="190" width="10" height="70"/>
+    <rect x="1000" y="190" width="70" height="10"/>
+    <path d="M1048 200 L1092 200 L1100 222 L1040 222 Z"/>
+  </g>
+  <g fill="#3fb4bc">
+    <rect x="1050" y="240" width="5" height="26" rx="2"/><rect x="1068" y="252" width="5" height="26" rx="2"/>
+    <rect x="1086" y="238" width="5" height="26" rx="2"/><rect x="1058" y="296" width="5" height="26" rx="2"/>
+    <rect x="1078" y="310" width="5" height="26" rx="2"/>
+  </g>
+  <rect x="980" y="560" width="160" height="12" fill="#1d1d1d" opacity="0.25"/>
+  <!-- Plante -->
+  <rect x="1110" y="560" width="70" height="80" fill="#c98a4b"/>
+  <path d="M1145 560 Q1100 500 1112 440 Q1140 500 1145 560 Q1160 470 1200 450 Q1180 520 1145 560" fill="#2f7d55"/>
+</svg>

@@ -80,6 +80,11 @@ $visuels = [
     'cours' => ['cours-adultes.webp', 'Bloc Nord — cours adultes'],
     'detente' => ['espace-detente.webp', 'Bloc Nord — coin détente'],
     'chaussons' => ['location-chaussons.webp', 'Bloc Nord — location de chaussons'],
+    'vestiaires' => ['vestiaires.webp', 'Bloc Nord — vestiaires'],
+    'entrainement' => ['zone-entrainement.webp', 'Bloc Nord — espace entraînement'],
+    'enfants' => ['zone-enfants.webp', 'Bloc Nord — zone enfants'],
+    'debutant' => ['zone-debutant.webp', 'Bloc Nord — zone débutant'],
+    'plan' => ['plan-salle.webp', 'Bloc Nord — plan de la salle'],
 ];
 
 $images = [];
@@ -370,7 +375,7 @@ enregistrerPage($content, [
         [
             'type' => 'espaces',
             'titre' => 'Les espaces',
-            'introduction' => 'Photos provisoires : la salle est en travaux. Les vraies photos arrivent avant l’ouverture.',
+            'introduction' => 'Visuels provisoires : la salle est en travaux. Les vraies photos arrivent avant l’ouverture.',
             'cartes' => [
                 [
                     'titre' => 'La zone de bloc',
@@ -381,26 +386,26 @@ enregistrerPage($content, [
                 [
                     'titre' => 'La zone débutant',
                     'texte' => 'Des blocs faciles et bien balisés pour faire ses premiers pas.',
-                    'image' => null,
-                    'alt' => '',
+                    'image' => $images['debutant'],
+                    'alt' => 'Illustration : mur en dalle aux prises turquoise et orange, rubans de départ et panneau « Débutant »',
                 ],
                 [
                     'titre' => 'La zone enfants',
                     'texte' => 'Séparée et sécurisée, avec un sol amortissant. À partir de 6 ans.',
-                    'image' => null,
-                    'alt' => '',
+                    'image' => $images['enfants'],
+                    'alt' => 'Illustration : mur bas aux grosses prises rondes et colorées, au-dessus d’un épais tapis turquoise',
                 ],
                 [
                     'titre' => 'L’espace entraînement',
                     'texte' => 'Pan Güllich et poutres, pour progresser entre deux séances.',
-                    'image' => null,
-                    'alt' => '',
+                    'image' => $images['entrainement'],
+                    'alt' => 'Illustration : pan Güllich en dévers à barreaux de bois, poutre d’entraînement et kettlebell',
                 ],
                 [
                     'titre' => 'Les vestiaires',
                     'texte' => 'Douches et casiers.',
-                    'image' => null,
-                    'alt' => '',
+                    'image' => $images['vestiaires'],
+                    'alt' => 'Illustration : rangée de casiers orange et turquoise, banc en bois et douche carrelée',
                 ],
                 [
                     'titre' => 'Le coin détente',

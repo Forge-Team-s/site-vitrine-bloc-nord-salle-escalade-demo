@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <title>Zone débutant de Bloc Nord</title>
+  <rect width="1200" height="900" fill="#e4e0da"/>
+  <!-- Dalle, légèrement inclinée -->
+  <polygon points="80,60 720,60 760,690 40,690" fill="#f3f1ee"/>
+  <polygon points="720,60 1160,60 1160,690 760,690" fill="#3b3b3b"/>
+  <polygon points="720,60 1160,60 1160,120 724,120" fill="#ff6a13"/>
+  <!-- Prises de la dalle, avec étiquettes de départ -->
+  <g fill="#3fb4bc">
+    <ellipse cx="200" cy="560" rx="34" ry="22"/><ellipse cx="320" cy="470" rx="28" ry="20"/>
+    <ellipse cx="250" cy="370" rx="30" ry="20"/><ellipse cx="380" cy="280" rx="26" ry="18"/>
+    <ellipse cx="300" cy="180" rx="30" ry="20"/>
+  </g>
+  <g fill="#ff6a13">
+    <ellipse cx="520" cy="580" rx="32" ry="22"/><ellipse cx="600" cy="480" rx="26" ry="18"/>
+    <ellipse cx="500" cy="380" rx="30" ry="20"/><ellipse cx="620" cy="270" rx="26" ry="18"/>
+    <ellipse cx="540" cy="170" rx="28" ry="20"/>
+  </g>
+  <!-- Rubans de départ et de sortie -->
+  <g fill="#111111">
+    <rect x="160" y="588" width="80" height="14"/><rect x="480" y="608" width="80" height="14"/>
+    <rect x="262" y="140" width="76" height="14"/><rect x="502" y="132" width="76" height="14"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-weight="700" font-size="22" fill="#111111">
+    <text x="176" y="630">DÉPART</text><text x="496" y="650">DÉPART</text>
+  </g>
+  <!-- Mur voisin, prises sombres -->
+  <g fill="#ff6a13"><polygon points="820,250 860,232 852,276"/><polygon points="980,380 1024,366 1012,410"/><polygon points="1110,420 1140,410 1132,444"/></g>
+  <g fill="#3fb4bc"><circle cx="900" cy="470" r="18"/><circle cx="1060" cy="540" r="20"/><circle cx="860" cy="590" r="14"/></g>
+  <!-- Panneau de niveaux -->
+  <g transform="translate(800 150)">
+    <rect width="300" height="200" fill="#111111"/>
+    <text x="24" y="52" font-family="Arial, sans-serif" font-weight="900" font-size="34" fill="#ffffff">DÉBUTANT</text>
+    <circle cx="44" cy="110" r="18" fill="#ffd23f"/><circle cx="96" cy="110" r="18" fill="#3fb4bc"/><circle cx="148" cy="110" r="18" fill="#ff6a13"/>
+    <text x="24" y="170" font-family="Arial, sans-serif" font-size="24" fill="#d9d9d9">Blocs faciles balisés</text>
+  </g>
+  <!-- Tapis -->
+  <rect x="20" y="690" width="1160" height="110" fill="#1d1d1d"/>
+  <rect x="20" y="780" width="1160" height="20" fill="#ff6a13"/>
+  <g stroke="#2e2e2e" stroke-width="4"><line x1="400" y1="690" x2="400" y2="780"/><line x1="800" y1="690" x2="800" y2="780"/></g>
+  <rect y="800" width="1200" height="100" fill="#8d8a86"/>
+</svg>

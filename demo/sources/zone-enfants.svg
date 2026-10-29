@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <title>Zone enfants de Bloc Nord</title>
+  <rect width="1200" height="900" fill="#efe9e1"/>
+  <!-- Mur bas aux formes rondes -->
+  <path d="M60 640 L60 240 Q60 170 130 170 L1070 170 Q1140 170 1140 240 L1140 640 Z" fill="#f7f4ef"/>
+  <path d="M60 640 L60 420 Q300 330 600 400 Q900 470 1140 380 L1140 640 Z" fill="#3fb4bc"/>
+  <path d="M60 640 L60 520 Q320 470 620 530 Q900 590 1140 520 L1140 640 Z" fill="#ff6a13"/>
+  <path d="M60 240 Q60 170 130 170 L1070 170 Q1140 170 1140 240" stroke="#111111" stroke-width="14" fill="none"/>
+  <!-- Grosses prises arrondies -->
+  <g>
+    <circle cx="180" cy="260" r="34" fill="#ff6a13"/><circle cx="330" cy="230" r="26" fill="#ffd23f"/>
+    <circle cx="480" cy="290" r="38" fill="#111111"/><circle cx="640" cy="240" r="30" fill="#3fb4bc"/>
+    <circle cx="790" cy="280" r="34" fill="#ff6a13"/><circle cx="950" cy="230" r="26" fill="#111111"/>
+    <circle cx="1060" cy="300" r="32" fill="#ffd23f"/>
+    <circle cx="250" cy="390" r="30" fill="#111111"/><circle cx="420" cy="420" r="26" fill="#ffd23f"/>
+    <circle cx="720" cy="360" r="28" fill="#ffd23f"/><circle cx="880" cy="410" r="32" fill="#111111"/>
+    <circle cx="1020" cy="440" r="24" fill="#f7f4ef"/>
+    <circle cx="160" cy="500" r="26" fill="#ffd23f"/><circle cx="560" cy="480" r="30" fill="#f7f4ef"/>
+    <circle cx="980" cy="560" r="28" fill="#111111"/><circle cx="340" cy="560" r="24" fill="#111111"/>
+  </g>
+  <!-- Étoiles décoratives -->
+  <g fill="#ffd23f">
+    <polygon points="600,90 612,124 648,124 619,145 630,180 600,158 570,180 581,145 552,124 588,124"/>
+  </g>
+  <!-- Sol amortissant épais -->
+  <rect x="20" y="640" width="1160" height="150" rx="18" fill="#3fb4bc"/>
+  <rect x="20" y="640" width="1160" height="30" rx="14" fill="#5fcbd2"/>
+  <rect x="20" y="760" width="1160" height="30" rx="10" fill="#ff6a13"/>
+  <g stroke="#2e9aa1" stroke-width="5"><line x1="310" y1="672" x2="310" y2="760"/><line x1="600" y1="672" x2="600" y2="760"/><line x1="890" y1="672" x2="890" y2="760"/></g>
+  <rect y="790" width="1200" height="110" fill="#8d8a86"/>
+  <!-- Barrière de séparation -->
+  <g fill="#111111">
+    <rect x="1120" y="520" width="16" height="270"/>
+  </g>
+</svg>

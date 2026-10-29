@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" font-family="Arial, Helvetica, sans-serif">
+  <title>Plan de la salle Bloc Nord</title>
+  <rect width="1200" height="900" fill="#f3f1ee"/>
+  <!-- Enveloppe du bâtiment -->
+  <rect x="60" y="60" width="1080" height="780" fill="#ffffff" stroke="#111111" stroke-width="10"/>
+  <!-- Entrée -->
+  <rect x="520" y="830" width="160" height="20" fill="#f3f1ee"/>
+  <polygon points="600,800 630,860 570,860" fill="#ff6a13"/>
+  <text x="600" y="890" text-anchor="middle" font-size="22" font-weight="700" fill="#111111">ENTRÉE</text>
+
+  <!-- Murs de bloc le long des façades : 14 zones -->
+  <g fill="#ff6a13" stroke="#111111" stroke-width="3">
+    <rect x="70" y="70" width="150" height="70"/><rect x="220" y="70" width="150" height="70"/>
+    <rect x="370" y="70" width="150" height="70"/><rect x="520" y="70" width="150" height="70"/>
+    <rect x="670" y="70" width="150" height="70"/><rect x="820" y="70" width="150" height="70"/>
+    <rect x="970" y="70" width="160" height="70"/>
+    <rect x="1060" y="140" width="70" height="150"/><rect x="1060" y="290" width="70" height="150"/>
+    <rect x="1060" y="440" width="70" height="150"/>
+    <rect x="70" y="140" width="70" height="150"/><rect x="70" y="290" width="70" height="150"/>
+  </g>
+  <!-- Toit central : deux zones -->
+  <g fill="#111111"><rect x="440" y="300" width="160" height="150"/><rect x="600" y="300" width="160" height="150"/></g>
+  <g fill="#ffffff" font-size="26" font-weight="900" text-anchor="middle">
+    <text x="520" y="385">13</text><text x="680" y="385">14</text>
+  </g>
+  <g fill="#111111" font-size="26" font-weight="900" text-anchor="middle">
+    <text x="145" y="114">1</text><text x="295" y="114">2</text><text x="445" y="114">3</text>
+    <text x="595" y="114">4</text><text x="745" y="114">5</text><text x="895" y="114">6</text>
+    <text x="1050" y="114">7</text>
+    <text x="1095" y="224">8</text><text x="1095" y="374">9</text><text x="1095" y="524">10</text>
+    <text x="105" y="224">12</text><text x="105" y="374">11</text>
+  </g>
+  <!-- Tapis de réception -->
+  <g fill="#3a3a3a" opacity="0.18">
+    <rect x="140" y="140" width="920" height="70"/><rect x="990" y="210" width="70" height="380"/>
+    <rect x="140" y="210" width="70" height="230"/><rect x="420" y="280" width="360" height="190"/>
+  </g>
+
+  <!-- Espaces -->
+  <g stroke="#111111" stroke-width="3">
+    <rect x="70" y="470" width="300" height="200" fill="#3fb4bc"/>
+    <rect x="70" y="670" width="300" height="160" fill="#ffd23f"/>
+    <rect x="820" y="620" width="310" height="210" fill="#d9e9ea"/>
+    <rect x="690" y="620" width="130" height="210" fill="#e8e4de"/>
+    <rect x="390" y="640" width="280" height="150" fill="#c98a4b"/>
+    <rect x="860" y="470" width="190" height="140" fill="#e8e4de"/>
+  </g>
+  <g font-size="22" font-weight="700" fill="#111111" text-anchor="middle">
+    <text x="220" y="560">ZONE</text><text x="220" y="588">ENFANTS</text>
+    <text x="220" y="745">ZONE</text><text x="220" y="773">DÉBUTANT</text>
+    <text x="975" y="715">VESTIAIRES</text><text x="975" y="743">DOUCHES</text>
+    <text x="755" y="720">ACCUEIL</text>
+    <text x="530" y="710">COIN</text><text x="530" y="738">DÉTENTE</text>
+    <text x="955" y="535">ENTRAÎ-</text><text x="955" y="563">NEMENT</text>
+  </g>
+
+  <!-- Repères -->
+  <g transform="translate(240 270)">
+    <polygon points="0,-34 14,10 0,2 -14,10" fill="#111111"/>
+    <text x="0" y="36" text-anchor="middle" font-size="20" font-weight="900" fill="#111111">N</text>
+  </g>
+  <text x="600" y="530" text-anchor="middle" font-size="20" fill="#4d4d4d">Plan indicatif · 900 m²</text>
+</svg>
