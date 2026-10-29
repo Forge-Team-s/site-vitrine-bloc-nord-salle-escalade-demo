@@ -8,6 +8,10 @@ sites en service : les règles qui suivent existent pour ça, pas pour la forme.
 **Ouvrez une issue.** Même pour une correction évidente. Elle sert à vérifier que le défaut est
 bien là où on le croit, et elle devient la trace que quelqu'un relira dans six mois.
 
+**Sauf pour une faille de sécurité**, qui ne passe jamais par une issue publique : une issue la
+publie avant qu'un correctif existe, et chaque site installé reste exposé pendant ce temps. La
+marche à suivre est dans [SECURITY.md](SECURITY.md).
+
 Pour un défaut, l'issue doit permettre de le reproduire depuis une installation neuve. Un
 défaut qu'on ne sait pas reproduire ne peut être ni constaté avant correction, ni vérifié
 après.
@@ -132,6 +136,26 @@ sa discussion d'annonce ouverte.
   4,5:1, pas de transparence sur du texte, `alt` obligatoire sur les médias.
 - Aucun secret dans le dépôt : ni `.env`, ni clé, ni base de données.
 
+## Licence et crédit
+
+**Une contribution est proposée sous la licence de ce dépôt**, dont le texte est dans
+[LICENSE](LICENSE). En ouvrant une proposition, vous acceptez qu'elle y soit publiée à ces
+conditions.
+
+**Le crédit passe par le dépôt, jamais par l'interface livrée.** Les apports sont nommés dans
+[CONTRIBUTORS.md](CONTRIBUTORS.md), dans l'entrée du journal de la version qui les contient, et
+dans les notes de cette version.
+
+**Rien de ce qui est livré à un client ne porte de signature individuelle**, ni l'administration
+ni le site public. La règle vaut pour tout le monde, mainteneur compris : un site livré affiche
+le client, pas ceux qui l'ont construit. À dix contributions, l'administration deviendrait une
+page de crédits.
+
+**Un composant extérieur dont la licence impose une mention dans l'interface ne peut donc pas
+être intégré.** C'est aussi ce que dit la section « Composants tiers » de la licence : aucun
+composant tiers n'est versionné ici. Les dépendances sont installées par `composer install` et
+`php bin/install-cockpit.php`, et le texte de leur licence est livré avec elles.
+
 ## Discuter avant de décider
 
 Une décision qui change le socle se discute dans les Discussions avant d'être codée, et sa
@@ -142,6 +166,21 @@ décision que personne ne retrouvera.
 
 Les propositions sont relues avant fusion. Une relecture qui demande une modification n'est pas
 un refus : elle dit ce qui manque pour que la proposition entre.
+
+La fusion se fait par un commit de fusion, le seul mode ouvert : c'est lui qui relie une ligne
+de code à la discussion qui l'a décidée. Si `main` a avancé entre-temps, le bouton « Update
+branch » est à utiliser avant de fusionner : les contrôles doivent être verts sur un état à
+jour.
+
+La branche est supprimée après la fusion. Elle reste restaurable depuis la proposition, d'un
+bouton.
+
+Une remarque se dépose dans la proposition ou dans une issue, jamais sur un commit : le dépôt
+n'accepte pas les commentaires de commit, que personne ne retrouve ensuite.
+
+Une poussée ne peut pas créer ou mettre à jour plus de cinq branches ou étiquettes à la fois.
+Le refus vient du serveur et sa cause est rarement évidente : elle est presque toujours un
+`git push --tags` ou un `git push --all` lancé par mégarde.
 
 Merci de contribuer. Les apports sont crédités dans [CONTRIBUTORS.md](CONTRIBUTORS.md) et
 nommés dans le journal des versions.
