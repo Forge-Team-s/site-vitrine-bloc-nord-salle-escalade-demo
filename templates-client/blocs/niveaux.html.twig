@@ -1,0 +1,43 @@
+{# Niveaux de difficulté : une échelle de couleurs, de la plus facile à la
+   plus difficile.
+
+   La liste est ordonnée : l'ordre porte le sens, la balise <ol> le dit aux
+   lecteurs d'écran sans numéro à écrire. Le nom de la couleur est toujours
+   écrit : la couleur seule ne dit rien à qui la distingue mal. #}
+
+{% set couleurs = {
+    'jaune': 'Jaune', 'vert': 'Vert', 'bleu': 'Bleu', 'orange': 'Orange',
+    'rouge': 'Rouge', 'violet': 'Violet', 'noir': 'Noir', 'blanc': 'Blanc'
+} %}
+
+<section class="bloc bloc-niveaux">
+
+    {% if titre %}
+        <h{{ niveau }}>{{ titre }}</h{{ niveau }}>
+    {% endif %}
+
+    {% if bloc.introduction %}
+        <p class="bloc-niveaux__introduction">{{ bloc.introduction }}</p>
+    {% endif %}
+
+    {% if bloc.niveaux is not empty %}
+        <ol class="niveaux">
+            {% for n in bloc.niveaux %}
+                {% set couleur = n.couleur in couleurs|keys ? n.couleur : 'blanc' %}
+                <li class="niveau">
+                    <span class="niveau__couleur niveau__couleur--{{ couleur }}">{{ couleurs[couleur] }}</span>
+                    <span class="niveau__texte">
+                        {% if n.cotation %}
+                            <span class="niveau__cotation">{{ n.cotation }}</span>
+                        {% endif %}
+                        {% if n.description %}
+                            <span class="niveau__description">{{ n.description }}</span>
+                        {% endif %}
+                    </span>
+                </li>
+            {% endfor %}
+        </ol>
+        <p class="niveaux__sens" aria-hidden="true"><span>Plus facile</span><span>Plus difficile</span></p>
+    {% endif %}
+
+</section>

@@ -1,0 +1,52 @@
+{# Tarifs : un intitulé, un prix par ligne.
+
+   Les lignes peuvent être reprises d'une autre page — l'accueil reprend celles
+   de la page « Tarifs » — pour que les prix ne se saisissent qu'à un endroit.
+   La page liée arrive complète, sections comprises : le site lit les liens
+   entre contenus en les résolvant (voir App\Content\Repository::page). #}
+
+{% set lignes = bloc.lignes|default([]) %}
+{% set remarque = bloc.remarque|default('') %}
+
+{% set repris = (bloc.reprendre.blocs ?? [])|filter(b => (b.type ?? '') == 'tarifs' and (b.lignes ?? []) is not empty)|first %}
+
+{% if repris %}
+    {% set lignes = repris.lignes %}
+    {% set remarque = remarque ?: repris.remarque|default('') %}
+{% endif %}
+
+<section class="bloc bloc-tarifs">
+
+    {% if titre %}
+        <h{{ niveau }}>{{ titre }}</h{{ niveau }}>
+    {% endif %}
+
+    {% if bloc.introduction %}
+        <p class="bloc-tarifs__introduction">{{ bloc.introduction }}</p>
+    {% endif %}
+
+    {% if lignes is not empty %}
+        <dl class="tarifs">
+            {% for ligne in lignes %}
+                <div class="tarif{% if ligne.miseEnAvant %} tarif--avant{% endif %}">
+                    <dt class="tarif__libelle">
+                        {{ ligne.libelle }}
+                        {% if ligne.precision %}
+                            <span class="tarif__precision">{{ ligne.precision }}</span>
+                        {% endif %}
+                    </dt>
+                    <dd class="tarif__prix">{{ ligne.prix }}</dd>
+                </div>
+            {% endfor %}
+        </dl>
+    {% endif %}
+
+    {% if remarque %}
+        <p class="bloc-tarifs__note">{{ remarque }}</p>
+    {% endif %}
+
+    {% if bloc.boutonTexte and bloc.boutonLien %}
+        <p><a class="bouton" href="{{ bloc.boutonLien }}">{{ bloc.boutonTexte }}</a></p>
+    {% endif %}
+
+</section>

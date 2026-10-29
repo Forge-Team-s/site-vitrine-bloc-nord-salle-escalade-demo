@@ -1,0 +1,70 @@
+{# L'essentiel : quand c'est ouvert, où c'est, et où aller ensuite.
+
+   Les horaires viennent de l'identité du site, comme dans le pied de page :
+   une seule saisie. Les jours consécutifs aux mêmes horaires sont regroupés
+   — « Lundi – vendredi » — pour se lire d'un coup d'œil sur un téléphone. #}
+
+{% set jours = {
+    'lundi': 'Lundi',
+    'mardi': 'Mardi',
+    'mercredi': 'Mercredi',
+    'jeudi': 'Jeudi',
+    'vendredi': 'Vendredi',
+    'samedi': 'Samedi',
+    'dimanche': 'Dimanche'
+} %}
+
+{% set groupes = [] %}
+{% if bloc.afficherHoraires is not same as(false) and site.horaires %}
+    {% for cle, libelle in jours %}
+        {% set valeur = site.horaires[cle]|default('')|trim ?: 'Fermé' %}
+        {% set dernier = groupes|last %}
+        {% if dernier and dernier.valeur == valeur %}
+            {% set groupes = groupes|slice(0, groupes|length - 1)|merge([dernier|merge({a: libelle})]) %}
+        {% else %}
+            {% set groupes = groupes|merge([{de: libelle, a: null, valeur: valeur}]) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<section class="bloc bloc-essentiel">
+
+    {% if titre %}
+        <h{{ niveau }}>{{ titre }}</h{{ niveau }}>
+    {% endif %}
+
+    <div class="bloc-essentiel__colonnes">
+
+        {% if groupes is not empty %}
+            <dl class="bloc-essentiel__horaires">
+                {% for g in groupes %}
+                    <div class="bloc-essentiel__horaire">
+                        <dt>{{ g.de }}{% if g.a %} – {{ g.a|lower }}{% endif %}</dt>
+                        <dd>{{ g.valeur }}</dd>
+                    </div>
+                {% endfor %}
+            </dl>
+        {% endif %}
+
+        <div class="bloc-essentiel__acces">
+            {% if site.adresse %}
+                <address>{{ site.adresse|nl2br }}</address>
+            {% endif %}
+            {% if site.telephone %}
+                <p><a href="tel:{{ tel_href(site.telephone) }}">{{ site.telephone }}</a></p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    {% if bloc.liens is not empty %}
+        <ul class="bloc-essentiel__liens">
+            {% for lien in bloc.liens %}
+                {% if lien.texte and lien.adresse %}
+                    <li><a class="bouton{% if not loop.first %} bouton--contour{% endif %}" href="{{ lien.adresse }}">{{ lien.texte }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</section>

@@ -19,3 +19,1183 @@
 
    Après toute modification : php bin/purge-cache.php
    ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Bloc Nord ────────────────────────────────────────────────────────────
+   Noir, blanc et l'orange vif du logo. Cet orange est clair : il ne porte
+   que du texte noir (6,6:1), jamais du blanc (2,9:1). Les liens sur fond
+   blanc prennent l'orange foncé saisi dans l'administration (5,2:1). */
+
+:root {
+    --bn-noir: #111111;
+    --bn-gris: #1f1f1f;
+    --bn-orange: #ff6a13;          /* texte noir dessus : 6,6:1 */
+    --bn-turquoise: #3fb4bc;       /* texte noir dessus : 7,6:1 */
+    --bn-clair: #f3f1ee;
+    --bn-gris-texte: #595959;      /* sur blanc : 7,0:1 · sur --bn-clair : 6,2:1 */
+    --couleur-texte-doux: #4d4d4d; /* sur blanc : 8,5:1 */
+    --couleur-fond-doux: #f3f1ee;
+    --largeur: 72rem;
+}
+
+body {
+    font-size: 1.0625rem;
+}
+
+h1,
+h2,
+.bloc-hero__titre {
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+}
+
+h1,
+.bloc-hero__titre {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    line-height: 1;
+}
+
+h2 {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    line-height: 1.05;
+}
+
+/* Un trait orange sous chaque titre de section : la signature du site. */
+.bloc > h2::after,
+.bloc-texte-image__texte > h2::after {
+    content: "";
+    display: block;
+    width: 3rem;
+    height: 0.35rem;
+    margin-top: 0.6rem;
+    background: var(--bn-orange);
+}
+
+.page__titre {
+    margin-top: 2.5rem;
+}
+
+.bloc {
+    margin: 3.5rem 0;
+}
+
+/* ── Boutons ──────────────────────────────────────────────────────────── */
+
+.bouton,
+button.bouton {
+    display: inline-block;
+    padding: 0.8rem 1.4rem;
+    border: 2px solid var(--bn-noir);
+    border-radius: 0;
+    background: var(--bn-orange);
+    color: var(--bn-noir);          /* 6,6:1 */
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    line-height: 1.2;
+}
+
+.bouton:hover,
+button.bouton:hover {
+    background: var(--bn-noir);
+    color: #ffffff;
+}
+
+.bouton--contour {
+    background: #ffffff;
+}
+
+/* ── En-tête ──────────────────────────────────────────────────────────────
+   Bande noire pleine largeur, sans recopier le gabarit : l'ombre déborde de
+   l'en-tête, la découpe l'arrête aux bords de la fenêtre. */
+
+.en-tete {
+    position: relative;
+    align-items: center;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 0;
+    background: var(--bn-noir);
+    box-shadow: 0 0 0 100vmax var(--bn-noir);
+    clip-path: inset(0 -100vmax);
+    color: #ffffff;
+}
+
+.en-tete__nom {
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.en-tete__nom a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #ffffff;
+}
+
+/* Sans logo renseigné, un losange orange accompagne le nom. */
+.en-tete__nom a::before {
+    content: "";
+    width: 1.1rem;
+    height: 1.1rem;
+    background: var(--bn-orange);
+    transform: rotate(45deg);
+}
+
+.en-tete__nom--logo a::before {
+    display: none;
+}
+
+.en-tete__logo {
+    display: block;
+    width: auto;
+    height: 3.25rem;
+}
+
+.en-tete__slogan {
+    margin-top: 0.3rem;
+    color: #d9d9d9;                 /* sur noir : 13,4:1 */
+    font-size: 0.875rem;
+}
+
+.menu__liste {
+    gap: 0.25rem 1.25rem;
+}
+
+.menu__liste a {
+    padding: 0.35rem 0;
+    color: #ffffff;
+    font-weight: 700;
+    border-bottom-width: 3px;
+}
+
+.menu__liste a:hover,
+.menu__liste a[aria-current="page"] {
+    border-bottom-color: var(--bn-orange);
+}
+
+.en-tete a:focus-visible {
+    outline-color: var(--bn-orange);
+}
+
+/* Sur téléphone, le menu tient sur une ligne qui défile au pouce : Tarifs
+   et Planning restent visibles sans ouvrir quoi que ce soit. */
+@media (max-width: 47.99rem) {
+
+    .en-tete {
+        padding-bottom: 0;
+    }
+
+    .en-tete__slogan {
+        display: none;
+    }
+
+    .menu {
+        width: 100%;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .menu__liste {
+        flex-wrap: nowrap;
+        padding-bottom: 0.4rem;
+    }
+
+    .menu__liste li {
+        flex: 0 0 auto;
+    }
+}
+
+/* ── Bandeau d'ouverture ──────────────────────────────────────────────────
+   Photo en grand, pleine largeur ; le texte dans un cartouche noir, posé sur
+   la photo à partir de la tablette, dessous sur téléphone. */
+
+.bloc-hero {
+    display: grid;
+    margin: 0 calc(50% - 50vw) 3.5rem;
+    background: var(--bn-noir);
+}
+
+.bloc-hero__image {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: clamp(16rem, 60vh, 38rem);
+    object-fit: cover;
+    border-radius: 0;
+}
+
+.bloc-hero__texte {
+    padding: 1.5rem 1.25rem 2rem;
+    color: #ffffff;
+}
+
+.bloc-hero__titre {
+    margin: 0 0 0.75rem;
+}
+
+.bloc-hero__accroche {
+    margin: 0 0 1rem;
+    color: #ffffff;
+    font-size: 1.125rem;
+}
+
+@media (min-width: 48rem) {
+
+    .bloc-hero__texte {
+        grid-area: 1 / 1;
+        align-self: end;
+        justify-self: start;
+        max-width: 38rem;
+        margin: 0 0 2.5rem max(1.25rem, calc(50vw - var(--largeur) / 2 + 1.25rem));
+        padding: 1.75rem 2rem;
+        background: var(--bn-noir);
+        border-left: 0.5rem solid var(--bn-orange);
+    }
+}
+
+/* ── Texte et image ───────────────────────────────────────────────────── */
+
+.bloc-texte-image__image {
+    border-radius: 0;
+}
+
+@media (min-width: 48rem) {
+    .bloc-texte-image {
+        align-items: center;
+    }
+}
+
+/* ── Annonce ──────────────────────────────────────────────────────────── */
+
+.bloc-annonce {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-left: 0.5rem solid var(--bn-noir);
+}
+
+.bloc-annonce--offre {
+    background: var(--bn-orange);
+    color: var(--bn-noir);          /* 6,6:1 */
+}
+
+.bloc-annonce--alerte {
+    background: var(--bn-noir);
+    color: #ffffff;
+    border-left-color: var(--bn-orange);
+}
+
+.bloc-annonce__titre {
+    margin: 0 0 0.25rem;
+    font-size: 1.25rem;
+}
+
+.bloc-annonce__titre::after {
+    display: none;
+}
+
+.bloc-annonce__message,
+.bloc-annonce__action {
+    margin: 0;
+}
+
+.bloc-annonce--offre .bouton {
+    background: var(--bn-noir);
+    color: #ffffff;
+}
+
+.bloc-annonce--offre .bouton:hover {
+    background: #ffffff;
+    color: var(--bn-noir);
+}
+
+/* Le bandeau ne laisse pas d'espace : l'annonce qui le suit s'y accole. */
+.bloc-hero + .bloc-annonce {
+    margin-top: -3.5rem;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-left: max(1.25rem, calc(50vw - var(--largeur) / 2 + 1.25rem));
+    padding-right: max(1.25rem, calc(50vw - var(--largeur) / 2 + 1.25rem));
+    border-left: 0;
+}
+
+/* ── Tarifs ───────────────────────────────────────────────────────────────
+   Une ligne par tarif, le prix aligné à droite et en grand : lisible d'une
+   main, d'un coup d'œil, sans tableau à faire défiler. */
+
+.bloc-tarifs__introduction,
+.bloc-tarifs__note {
+    max-width: 44rem;
+}
+
+.bloc-tarifs__note {
+    color: var(--couleur-texte-doux);
+    font-size: 0.9375rem;
+}
+
+.tarifs {
+    display: grid;
+    margin: 1.5rem 0;
+    border-top: 3px solid var(--bn-noir);
+}
+
+@media (min-width: 48rem) {
+    .tarifs {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 2.5rem;
+    }
+}
+
+.tarif {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0.85rem 0.25rem;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+.tarif--avant {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    background: var(--bn-orange);
+    border-bottom-color: var(--bn-noir);
+}
+
+.tarif__libelle {
+    font-weight: 700;
+}
+
+.tarif__precision {
+    display: block;
+    color: var(--bn-gris-texte);
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+.tarif--avant .tarif__precision {
+    color: var(--bn-noir);
+}
+
+.tarif__prix {
+    margin: 0;
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+/* ── L'essentiel ──────────────────────────────────────────────────────── */
+
+.bloc-essentiel {
+    padding: 2rem 1.5rem;
+    background: var(--bn-noir);
+    color: #ffffff;
+}
+
+.bloc-essentiel > h2 {
+    margin-top: 0;
+}
+
+.bloc-essentiel a {
+    color: #ffffff;
+}
+
+.bloc-essentiel__colonnes {
+    display: grid;
+    gap: 1.5rem 3rem;
+}
+
+@media (min-width: 48rem) {
+    .bloc-essentiel__colonnes {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.bloc-essentiel__horaires {
+    margin: 0;
+}
+
+.bloc-essentiel__horaire {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    max-width: 24rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #444444;
+}
+
+.bloc-essentiel__horaire dt {
+    font-weight: 700;
+}
+
+.bloc-essentiel__horaire dd {
+    margin: 0;
+    font-weight: 900;
+    color: var(--bn-orange);        /* sur noir : 6,6:1 */
+}
+
+.bloc-essentiel__acces address,
+.bloc-essentiel__acces p {
+    margin: 0 0 0.75rem;
+}
+
+.bloc-essentiel__liens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bloc-essentiel .bouton {
+    border-color: var(--bn-orange);
+    color: var(--bn-noir);
+}
+
+.bloc-essentiel .bouton--contour {
+    background: transparent;
+    color: #ffffff;
+}
+
+.bloc-essentiel .bouton:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: var(--bn-noir);
+}
+
+/* ── Chiffres clés ────────────────────────────────────────────────────── */
+
+.chiffres {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    background: var(--bn-noir);
+    border: 1px solid var(--bn-noir);
+}
+
+@media (min-width: 48rem) {
+    .chiffres {
+        grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    }
+}
+
+.chiffre {
+    padding: 1.25rem 1rem;
+    background: #ffffff;
+}
+
+.chiffre__valeur {
+    display: block;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    font-weight: 900;
+    line-height: 1;
+}
+
+.chiffre__libelle {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--couleur-texte-doux);
+}
+
+/* ── Espaces ──────────────────────────────────────────────────────────── */
+
+.bloc-espaces__introduction,
+.bloc-questions__introduction,
+.bloc-planning__introduction {
+    max-width: 44rem;
+}
+
+.espaces {
+    display: grid;
+    gap: 1.25rem;
+    align-items: start;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+@media (min-width: 40rem) {
+    .espaces {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 60rem) {
+    .espaces {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.espace {
+    display: flex;
+    flex-direction: column;
+    background: var(--bn-clair);
+}
+
+.espace__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.espace--sans-photo {
+    border-top: 0.5rem solid var(--bn-orange);
+}
+
+.espace__texte {
+    padding: 1rem 1.25rem 1.25rem;
+}
+
+.espace__titre {
+    margin: 0 0 0.4rem;
+    font-size: 1.125rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.espace__texte p {
+    margin: 0;
+}
+
+/* ── Questions fréquentes ─────────────────────────────────────────────── */
+
+.questions {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 48rem) {
+    .questions {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.question {
+    padding: 1.25rem 1.5rem;
+    background: var(--bn-clair);
+    border-left: 0.35rem solid var(--bn-orange);
+}
+
+.question__intitule {
+    margin: 0 0 0.4rem;
+    font-size: 1.125rem;
+}
+
+.question__reponse {
+    margin: 0;
+}
+
+/* ── Planning ─────────────────────────────────────────────────────────────
+   Téléphone : une journée par ligne, les créneaux à la suite, les heures de
+   fermeture masquées. Ordinateur : sept colonnes sur une échelle d'heures,
+   la hauteur de chaque créneau suivant sa durée. */
+
+.planning-legende {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: 1.25rem 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9375rem;
+}
+
+.planning-legende__entree {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.planning-legende__entree::before {
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--bn-noir);
+}
+
+.planning-legende__entree--libre::before,
+.planning__segment--libre {
+    background: var(--bn-clair);
+}
+
+.planning-legende__entree--enfants::before,
+.planning__segment--enfants {
+    background: var(--bn-turquoise);
+}
+
+.planning-legende__entree--adultes::before,
+.planning__segment--adultes {
+    background: var(--bn-orange);
+}
+
+.planning-legende__entree--clubs::before,
+.planning__segment--clubs {
+    background: var(--bn-noir);
+}
+
+.planning-legende__entree--evenement::before,
+.planning__segment--evenement {
+    background: #ffd23f;            /* texte noir dessus : 13,1:1 */
+}
+
+.planning__segment--clubs {
+    color: #ffffff;
+}
+
+.planning {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.planning__jour {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+.planning__nom {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.planning__ouverture {
+    display: block;
+    color: var(--bn-gris-texte);
+    font-size: 0.875rem;
+    font-weight: 400;
+    text-transform: none;
+}
+
+.planning__segments {
+    display: grid;
+    gap: 0.3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.planning__segment {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
+    align-items: baseline;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.9375rem;
+    line-height: 1.3;
+}
+
+.planning__segment--ferme,
+.planning__segment--vide {
+    display: none;
+}
+
+.planning__segment--ferme-jour {
+    color: var(--bn-gris-texte);
+}
+
+.planning__heures {
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.planning__libelle {
+    font-weight: 600;
+}
+
+.planning__precision {
+    width: 100%;
+    font-size: 0.8125rem;
+}
+
+.planning__echelle {
+    display: none;
+}
+
+.bloc-planning__note {
+    color: var(--couleur-texte-doux);
+    font-size: 0.9375rem;
+}
+
+/* Une demi-heure = une rangée. Les classes de durée remplacent un attribut
+   style, que la politique de contenu du site refuse. */
+@media (min-width: 60rem) {
+
+    .planning--grille {
+        --planning-entete: 3.25rem;
+        --planning-rangee: 1.45rem;
+        grid-template-columns: 2.75rem repeat(7, minmax(0, 1fr));
+        gap: 0 0.3rem;
+    }
+
+    .planning--grille .planning__echelle {
+        display: grid;
+        grid-auto-rows: calc(var(--planning-rangee) * 2);
+        padding-top: var(--planning-entete);
+        color: var(--bn-gris-texte);
+        font-size: 0.75rem;
+    }
+
+    .planning__graduation {
+        border-top: 1px solid #cfcfcf;
+        padding-top: 0.1rem;
+    }
+
+    .planning--grille .planning__jour {
+        display: block;
+        padding: 0;
+        border: 0;
+    }
+
+    .planning--grille .planning__nom {
+        height: var(--planning-entete);
+        padding: 0.3rem 0.4rem;
+        background: var(--bn-noir);
+        color: #ffffff;
+        font-size: 0.875rem;
+        line-height: 1.2;
+    }
+
+    .planning--grille .planning__ouverture {
+        color: #d9d9d9;             /* sur noir : 13,4:1 */
+        font-size: 0.75rem;
+    }
+
+    .planning--grille .planning__segments {
+        grid-auto-rows: var(--planning-rangee);
+        gap: 0;
+    }
+
+    .planning--grille .planning__segment {
+        display: block;
+        overflow: hidden;
+        margin-bottom: 1px;
+        padding: 0.2rem 0.35rem;
+        font-size: 0.75rem;
+        line-height: 1.25;
+    }
+
+    .planning--grille .planning__segment--ferme,
+    .planning--grille .planning__segment--vide,
+    .planning--grille .planning__segment--ferme-jour {
+        display: block;
+        background: repeating-linear-gradient(-45deg, #ffffff 0 6px, #ececec 6px 7px);
+    }
+
+    .planning--grille .planning__heures,
+    .planning--grille .planning__libelle,
+    .planning--grille .planning__precision {
+        display: block;
+        width: auto;
+    }
+
+    /* Une demi-heure ne laisse la place qu'aux heures : le reste est lu par
+       les lecteurs d'écran, sans être affiché. */
+    .planning--grille .planning__segment--d1 .planning__libelle,
+    .planning--grille .planning__segment--d1 .planning__precision {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .planning__segment--d1 { grid-row: span 1; }
+    .planning__segment--d2 { grid-row: span 2; }
+    .planning__segment--d3 { grid-row: span 3; }
+    .planning__segment--d4 { grid-row: span 4; }
+    .planning__segment--d5 { grid-row: span 5; }
+    .planning__segment--d6 { grid-row: span 6; }
+    .planning__segment--d7 { grid-row: span 7; }
+    .planning__segment--d8 { grid-row: span 8; }
+    .planning__segment--d9 { grid-row: span 9; }
+    .planning__segment--d10 { grid-row: span 10; }
+    .planning__segment--d11 { grid-row: span 11; }
+    .planning__segment--d12 { grid-row: span 12; }
+    .planning__segment--d13 { grid-row: span 13; }
+    .planning__segment--d14 { grid-row: span 14; }
+    .planning__segment--d15 { grid-row: span 15; }
+    .planning__segment--d16 { grid-row: span 16; }
+    .planning__segment--d17 { grid-row: span 17; }
+    .planning__segment--d18 { grid-row: span 18; }
+    .planning__segment--d19 { grid-row: span 19; }
+    .planning__segment--d20 { grid-row: span 20; }
+    .planning__segment--d21 { grid-row: span 21; }
+    .planning__segment--d22 { grid-row: span 22; }
+    .planning__segment--d23 { grid-row: span 23; }
+    .planning__segment--d24 { grid-row: span 24; }
+    .planning__segment--d25 { grid-row: span 25; }
+    .planning__segment--d26 { grid-row: span 26; }
+    .planning__segment--d27 { grid-row: span 27; }
+    .planning__segment--d28 { grid-row: span 28; }
+    .planning__segment--d29 { grid-row: span 29; }
+    .planning__segment--d30 { grid-row: span 30; }
+    .planning__segment--d31 { grid-row: span 31; }
+    .planning__segment--d32 { grid-row: span 32; }
+    .planning__segment--d33 { grid-row: span 33; }
+    .planning__segment--d34 { grid-row: span 34; }
+    .planning__segment--d35 { grid-row: span 35; }
+    .planning__segment--d36 { grid-row: span 36; }
+}
+
+/* ── Coordonnées et formulaire ────────────────────────────────────────── */
+
+.bloc-contact {
+    border-radius: 0;
+    border-left: 0.5rem solid var(--bn-orange);
+}
+
+.formulaire input[type="text"],
+.formulaire input[type="email"],
+.formulaire textarea {
+    border: 2px solid var(--bn-noir);
+    border-radius: 0;
+}
+
+/* ── Actualités ───────────────────────────────────────────────────────── */
+
+.actualite-resume__image,
+.actualite__image {
+    border-radius: 0;
+}
+
+/* ── Pied de page ─────────────────────────────────────────────────────── */
+
+.pied {
+    border-top: 0.5rem solid var(--bn-orange);
+    background: var(--bn-noir);
+    color: #ffffff;
+}
+
+.pied a {
+    color: #ffffff;
+}
+
+.pied__titre {
+    color: var(--bn-orange);        /* sur noir : 6,6:1 */
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.pied__horaires dd {
+    color: #d9d9d9;
+}
+
+.pied__legal {
+    border-top-color: #333333;
+}
+
+.pied a:focus-visible {
+    outline-color: var(--bn-orange);
+}
+
+/* ── Bandeau de démonstration ─────────────────────────────────────────── */
+
+.bandeau-demo {
+    background: var(--bn-orange);
+    color: var(--bn-noir);          /* 6,6:1 */
+    border-bottom: 2px solid var(--bn-noir);
+}
+
+.bandeau-demo__texte {
+    max-width: var(--largeur);
+    margin: 0 auto;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.bandeau-demo__lien {
+    color: var(--bn-noir);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.bandeau-demo__lien:focus-visible {
+    outline-color: var(--bn-noir);
+}
+
+/* ── Plan de la salle ─────────────────────────────────────────────────── */
+
+.bloc-plan-salle__introduction {
+    max-width: 44rem;
+}
+
+.bloc-plan-salle__contenu {
+    display: grid;
+    gap: 1.5rem 2.5rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 60rem) {
+    .bloc-plan-salle__contenu {
+        grid-template-columns: 3fr 2fr;
+        align-items: start;
+    }
+}
+
+.bloc-plan-salle__plan {
+    display: block;
+    width: 100%;
+    border: 2px solid var(--bn-noir);
+}
+
+.reperes {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.repere {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+}
+
+.repere__numero {
+    flex: 0 0 4.5rem;
+    white-space: nowrap;
+    padding: 0.2rem 0.4rem;
+    background: var(--bn-orange);
+    color: var(--bn-noir);          /* 6,6:1 */
+    font-weight: 900;
+    text-align: center;
+}
+
+.repere__numero--espace {
+    margin-top: 0.65rem;
+    height: 0.35rem;
+    padding: 0;
+    background: var(--bn-noir);
+}
+
+.repere__nom {
+    display: block;
+    font-weight: 700;
+}
+
+.repere__description {
+    display: block;
+    color: var(--couleur-texte-doux);
+    font-size: 0.9375rem;
+}
+
+/* ── Niveaux de difficulté ────────────────────────────────────────────────
+   Chaque couleur porte le texte qui lui reste lisible (contrastes mesurés :
+   jaune 13,1 · vert 5,5 · orange 6,6 en noir ; bleu 5,7 · rouge 5,6 ·
+   violet 6,4 · noir 18,9 en blanc). */
+
+.bloc-niveaux__introduction {
+    max-width: 44rem;
+}
+
+.niveaux {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+@media (min-width: 48rem) {
+    .niveaux {
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+}
+
+.niveau {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+}
+
+@media (min-width: 48rem) {
+    .niveau {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}
+
+.niveau__couleur {
+    flex: 0 0 6.5rem;
+    padding: 0.55rem 0.5rem;
+    border: 2px solid var(--bn-noir);
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+@media (min-width: 48rem) {
+    .niveau__couleur {
+        flex: none;
+        padding: 1.4rem 0.5rem;
+        border-width: 2px 1px;
+    }
+
+    .niveau:first-child .niveau__couleur { border-left-width: 2px; }
+    .niveau:last-child .niveau__couleur { border-right-width: 2px; }
+}
+
+.niveau__couleur--jaune { background: #ffd23f; color: var(--bn-noir); }
+.niveau__couleur--vert { background: #2f9e5b; color: var(--bn-noir); }
+.niveau__couleur--orange { background: var(--bn-orange); color: var(--bn-noir); }
+.niveau__couleur--bleu { background: #2563c9; color: #ffffff; }
+.niveau__couleur--rouge { background: #c62828; color: #ffffff; }
+.niveau__couleur--violet { background: #7b3fbf; color: #ffffff; }
+.niveau__couleur--noir { background: var(--bn-noir); color: #ffffff; }
+.niveau__couleur--blanc { background: #ffffff; color: var(--bn-noir); }
+
+.niveau__cotation {
+    display: block;
+    font-size: 1.125rem;
+    font-weight: 900;
+}
+
+.niveau__description {
+    display: block;
+    color: var(--couleur-texte-doux);
+    font-size: 0.875rem;
+    line-height: 1.35;
+}
+
+@media (min-width: 48rem) {
+    .niveau__texte {
+        padding: 0 0.35rem;
+    }
+}
+
+.niveaux__sens {
+    display: none;
+}
+
+@media (min-width: 48rem) {
+    .niveaux__sens {
+        display: flex;
+        justify-content: space-between;
+        margin: 0.75rem 0 0;
+        color: var(--bn-gris-texte);
+        font-size: 0.875rem;
+        font-weight: 700;
+    }
+
+    .niveaux__sens span:last-child::after {
+        content: " →";
+    }
+
+    .niveaux__sens span:first-child::before {
+        content: "← ";
+    }
+}
+
+/* ── Prochains événements ─────────────────────────────────────────────── */
+
+.visuellement-cache {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.bloc-evenements__introduction {
+    max-width: 44rem;
+}
+
+.evenements {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 0;
+    list-style: none;
+}
+
+@media (min-width: 48rem) {
+    .evenements {
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    }
+}
+
+.evenement {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 2px solid var(--bn-noir);
+}
+
+.evenement__date {
+    flex: 0 0 5rem;
+    padding: 0.5rem 0.25rem 0.6rem;
+    background: var(--bn-noir);
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.evenement--competition .evenement__date,
+.evenement--ouverture .evenement__date {
+    background: var(--bn-orange);
+    color: var(--bn-noir);          /* 6,6:1 */
+}
+
+.evenement__jour-semaine,
+.evenement__mois {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.evenement__jour {
+    display: block;
+    font-size: 2.25rem;
+    font-weight: 900;
+}
+
+.evenement__genre {
+    margin: 0;
+    color: var(--bn-gris-texte);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.evenement__titre {
+    margin: 0.15rem 0 0.35rem;
+    font-size: 1.125rem;
+}
+
+.evenement__description,
+.evenement__texte p:last-child {
+    margin: 0 0 0.35rem;
+}
+
+.bloc-evenements__vide {
+    color: var(--couleur-texte-doux);
+}

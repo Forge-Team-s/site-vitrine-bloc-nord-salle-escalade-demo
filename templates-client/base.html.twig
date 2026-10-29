@@ -1,0 +1,88 @@
+{# Page shell. Content is rendered server-side and complete on first response.
+
+   Copie de templates/base.html.twig (socle 2.2.1). Deux ajouts : le bandeau
+   de démonstration sous le lien d'évitement, et le logo de l'identité du
+   site à la place du nom quand il est renseigné. Après une mise à jour du socle,
+   comparer avec : git diff vX.Y.Z -- templates/base.html.twig #}
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ site.nom|default('Site') }}{% endblock %}</title>
+    {# Passed in rather than recomputed: the preview title must be the title. #}
+    {% include 'partials/meta-sociales.html.twig' with { titrePartage: block('title') } %}
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" href="/assets/css/site.css">
+    {# This site's own styles, loaded after so they take precedence. Edit that
+       file rather than site.css: an update never touches it. #}
+    <link rel="stylesheet" href="/assets/css/client.css">
+    {# The customer's colours, written to a file so the content policy can
+       keep refusing inline styles. #}
+    <link rel="stylesheet" href="/assets/css/couleurs.css">
+    {# Does nothing for visitors: shows the way back to the admin only to whoever is signed in
+       (cockpit/addons/Passerelle). #}
+    <script src="/assets/js/passerelle.js" defer></script>
+    {% if jsonld|default('') is not empty %}
+        {# Built and encoded in PHP, so it is inserted as is. #}
+        <script type="application/ld+json">{{ jsonld|raw }}</script>
+    {% endif %}
+</head>
+<body>
+
+<a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+{# Site de démonstration : retirer cette ligne suffit à l'enlever. #}
+{% include 'partials/bandeau-demo.html.twig' %}
+
+<header class="en-tete">
+    <div class="en-tete__identite">
+        {% if site.logo %}
+            {# Le logo porte le nom : sa description le dit, rien n'est répété. #}
+            <p class="en-tete__nom en-tete__nom--logo"><a href="/">
+                {%- include 'partials/image.html.twig' with {
+                    asset: site.logo,
+                    alt: site.nom|default('Accueil'),
+                    classe: 'en-tete__logo',
+                    sizes: '12rem',
+                    eager: true
+                } only -%}
+            </a></p>
+        {% else %}
+            <p class="en-tete__nom"><a href="/">{{ site.nom|default('Site') }}</a></p>
+        {% endif %}
+        {% if site.slogan %}
+            <p class="en-tete__slogan">{{ site.slogan }}</p>
+        {% endif %}
+    </div>
+
+    {% if menu|default([]) is not empty or afficherActualites|default(false) %}
+        <nav class="menu" aria-label="Menu principal">
+            <ul class="menu__liste">
+                {% for entree in menu %}
+                    {% set adresse = entree.slug == accueilSlug|default('accueil') ? '/' : '/' ~ entree.slug %}
+                    <li>
+                        <a href="{{ adresse }}"{% if entree.slug == slug|default(null) %} aria-current="page"{% endif %}>{{ entree.libelle }}</a>
+                    </li>
+                {% endfor %}
+
+                {# Added on its own as soon as something is published there:
+                   an empty news section would be worse than none. #}
+                {% if afficherActualites|default(false) %}
+                    <li>
+                        <a href="/actualites"{% if slug|default(null) == 'actualites' %} aria-current="page"{% endif %}>Actualités</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</header>
+
+<main id="contenu">
+    {% block main %}{% endblock %}
+</main>
+
+{% include 'partials/pied.html.twig' %}
+
+</body>
+</html>

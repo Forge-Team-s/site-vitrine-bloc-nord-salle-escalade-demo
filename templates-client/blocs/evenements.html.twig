@@ -1,0 +1,64 @@
+{# Prochains événements, du plus proche au plus lointain.
+
+   Un événement passé n'est plus affiché. La page est mise en cache : il
+   disparaît au rendu suivant, c'est-à-dire au prochain enregistrement dans
+   l'administration, qui vide le cache. #}
+
+{% set mois = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'] %}
+{% set joursSemaine = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'] %}
+{% set genres = {
+    'competition': 'Compétition',
+    'ouverture': 'Nouveaux blocs',
+    'soiree': 'Soirée',
+    'autre': 'Événement'
+} %}
+
+{% set aujourdhui = 'now'|date('Y-m-d') %}
+{% set aVenir = (bloc.evenements|default([]))
+    |filter(e => e.date|default('') matches '/^\\d{4}-\\d{2}-\\d{2}$/' and e.date >= aujourdhui and e.titre|default(''))
+    |sort((a, b) => a.date <=> b.date) %}
+
+<section class="bloc bloc-evenements">
+
+    {% if titre %}
+        <h{{ niveau }}>{{ titre }}</h{{ niveau }}>
+    {% endif %}
+
+    {% if bloc.introduction %}
+        <p class="bloc-evenements__introduction">{{ bloc.introduction }}</p>
+    {% endif %}
+
+    {% if aVenir is not empty %}
+        <ol class="evenements">
+            {% for e in aVenir %}
+                {% set genre = e.genre in genres|keys ? e.genre : 'autre' %}
+                <li class="evenement evenement--{{ genre }}">
+                    <time class="evenement__date" datetime="{{ e.date }}">
+                        <span class="evenement__jour-semaine">{{ joursSemaine[e.date|date('N') - 1] }}</span>
+                        <span class="evenement__jour">{{ e.date|date('j') }}</span>
+                        <span class="evenement__mois">{{ mois[e.date|date('n') - 1] }}</span>
+                    </time>
+                    <div class="evenement__texte">
+                        <p class="evenement__genre">{{ genres[genre] }}{% if e.heure %} · {{ e.heure }}{% endif %}</p>
+                        <h{{ niveau + 1 }} class="evenement__titre">{{ e.titre }}</h{{ niveau + 1 }}>
+                        {% if e.description %}
+                            <p class="evenement__description">{{ e.description }}</p>
+                        {% endif %}
+                        {% if e.lien %}
+                            {# Hors contexte, « En savoir plus » ne dit rien : le titre
+                               complète l'intitulé pour les lecteurs d'écran. #}
+                            <p><a href="{{ e.lien }}">En savoir plus<span class="visuellement-cache"> : {{ e.titre }}</span></a></p>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p class="bloc-evenements__vide">Aucun événement annoncé pour le moment.</p>
+    {% endif %}
+
+    {% if bloc.boutonTexte and bloc.boutonLien %}
+        <p><a class="bouton" href="{{ bloc.boutonLien }}">{{ bloc.boutonTexte }}</a></p>
+    {% endif %}
+
+</section>

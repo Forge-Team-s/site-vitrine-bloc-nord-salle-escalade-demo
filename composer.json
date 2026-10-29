@@ -6,7 +6,9 @@
     "require": {
         "php": ">=8.3",
         "ext-curl": "*",
+        "ext-gd": "*",
         "ext-json": "*",
+        "ext-pdo_sqlite": "*",
         "twig/twig": "^3.28",
         "vlucas/phpdotenv": "^5.6"
     },
@@ -20,7 +22,8 @@
             "Tests\\": "tests/",
             "PasswordPolicy\\": "cockpit/addons/PasswordPolicy/",
             "EditorGuards\\": "cockpit/addons/EditorGuards/",
-            "Media\\": "cockpit/addons/Media/"
+            "Media\\": "cockpit/addons/Media/",
+            "Sections\\": "cockpit/lib/"
         }
     },
     "config": {

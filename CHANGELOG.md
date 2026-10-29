@@ -12,6 +12,306 @@ qu'il prend pour un socle recopié chez chaque client :
 La version installée est inscrite dans le fichier `VERSION`, à la racine. La procédure de
 fusion est dans [docs/mise-a-jour-socle.md](docs/mise-a-jour-socle.md).
 
+## 2.2.1 — 2026-10-12
+
+Les six modèles de contenu déclaraient `'localize' => false` sur 42 champs. Cockpit ne lit pas
+cette clé : celle qu'il lit pour un champ traduisible est `i18n`.
+
+**`cockpit/models/*.model.php`** n'en portent plus. Le comportement ne change pas, la valeur
+était `false` partout et le produit est en français seul. La clé laissait croire qu'un réglage
+de traduction était en place, et se recopiait dans chaque nouveau champ écrit sur le modèle d'un
+existant.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
+## 2.2.0 — 2026-10-12
+
+Un type de section se déclarait à quatre endroits de `cockpit/models/pages.model.php` : une
+variable de condition, une option du champ `type`, les listes partagées des champs communs, et
+ses propres champs. Ce fichier appartient au socle : tout site qui ajoutait un type entrait en
+conflit à chaque mise à jour.
+
+**Un type peut désormais se déclarer dans son propre fichier**, `cockpit/sections-client/` pour
+un site, `cockpit/sections/` pour le socle. `cockpit/models/pages.model.php` n'est plus touché.
+
+**`cockpit/lib/Registry.php`** découvre ces fichiers, les valide, écrit la condition de chaque
+champ depuis le nom du type, et étend les listes partagées demandées par `communs`.
+`bin/install-cockpit.php` installe le modèle assemblé.
+
+**Les deux écritures cohabitent.** Un site monte de version sans reprendre aucun de ses types
+existants, et déclare les nouveaux par fichier. Le client ne voit aucune différence. Le seul cas
+refusé est un même type déclaré des deux côtés : l'installation s'arrête en nommant les deux
+endroits.
+
+L'écriture dans `pages.model.php` sera dépréciée dans une version à venir. Pour un type nouveau,
+prendre le fichier de section.
+
+**Les refus**, chacun nommant le fichier en cause : un type sans gabarit, un fichier dont le nom
+ne correspond pas au type déclaré, un champ portant déjà une `condition`, un champ commun
+inexistant, un type déclaré deux fois.
+
+**Un type de section « Questions fréquentes » est livré**, le premier écrit au nouveau format.
+Les questions sont des `details` : elles s'ouvrent sans JavaScript et leur contenu est dans le
+HTML de la première réponse. Ses styles sont dans `site.css`, ses classes sont stables.
+
+Rien à faire sur un site existant au-delà de la fusion, y compris s'il a déjà son propre type
+« faq » : dans ce cas **la déclaration du site l'emporte**, celle du socle est laissée de côté,
+et l'installation le dit sans s'arrêter. Le contenu saisi par le client n'est pas touché.
+`docs/guide-integration.md` décrit comment prendre la version du socle à la place, le jour où on
+le décide.
+
+## 2.1.5 — 2026-10-11
+
+La mise en ligne laissait trois choses à deviner, dont une a bloqué un site en service le
+9 octobre 2026.
+
+**`docs/mise-a-jour-socle.md`**, étape 6, dit que le modèle de contenu existe en deux
+exemplaires et lequel fait foi. Modifier la copie installée de `public/admin/` puis lancer
+l'installation annulait la modification, sans message.
+
+**Le besoin de réseau de `install-cockpit.php --force`** est écrit : la commande télécharge
+l'archive de Cockpit avant toute copie, et s'arrête sans rien faire sur un hébergement sans
+accès sortant. Le contournement est donné, envoyer aussi `var/tmp/install/`, que `git pull`
+n'apporte pas puisque `var/` n'est pas versionné.
+
+**La mise en ligne sans ligne de commande** gagne le tableau de ce qu'il reste à purger à la
+main, selon ce qui a changé : le cache de pages par un enregistrement dans l'administration,
+`var/data/app.memory.sqlite` quand un modèle a changé, et `var/cache/twig` quand le transfert a
+conservé les dates d'origine des fichiers.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
+## 2.1.4 — 2026-10-11
+
+La procédure de mise à jour écrite à la main était exacte une fois, puis fausse. Trois écarts
+relevés sur une montée de version réelle le 8 octobre 2026.
+
+**`docs/mise-a-jour-socle.md`**, étape 2, traite le refus
+`would clobber existing tag` : il ne porte que sur l'étiquette nommée, les autres sont bien
+arrivées, et `git fetch` sort malgré tout en erreur. Un tableau dit quoi faire selon ce que
+l'étiquette locale désigne. La règle qui évite le cas est énoncée : le préfixe `v` appartient au
+socle, une étiquette propre à un site ne commence jamais par `v`.
+
+**Étape 3**, la branche porte désormais la version visée, `maj-socle-X.Y.Z`, le nom que pose
+déjà `bin/maj-socle.php`. Le nom fixe précédent était pris dès la deuxième mise à jour, et le
+document ne disait pas quoi faire du refus. Le cas est décrit.
+
+**Les numéros de version des exemples** sont remplacés par `X.Y.Z`. Recopiés tels quels, ils
+faisaient fusionner une version qui n'était ni celle du site ni celle visée.
+
+Deux garde-fous ajoutés : la branche documentée est celle que construit la commande, et aucune
+ligne de commande du document ne porte de numéro de version à recopier.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
+## 2.1.3 — 2026-10-11
+
+Deux caches pouvaient servir un contenu périmé sans jamais le signaler. Un travail juste,
+monté sur un hébergement, restait sans effet et sans message.
+
+**`public/index.php`** renseigne `auto_reload` pour Twig. Sans lui, l'option suivait `debug`,
+donc fausse en production : les gabarits compilés dans `var/cache/twig` étaient servis
+indéfiniment, sans que la date du gabarit source soit jamais comparée.
+
+**`bin/purge-cache.php`** vide aussi `var/cache/twig`, par la nouvelle classe
+`App\Cache\TemplateCache`. Aucune commande du socle ne le faisait. La mise à jour d'un site en
+bénéficie sans changement, puisqu'elle appelle déjà cette purge.
+
+**`bin/install-cockpit.php`** retire `var/data/app.memory.sqlite`, où Cockpit garde les modèles
+de contenu analysés. Le cache des modules était purgé, celui des modèles non : un type de
+section ajouté était copié au bon endroit sans que l'administration le montre. Constaté sur un
+site en service le 9 octobre 2026.
+
+**`docs/tests.md`** n'annonce plus le nombre de tests. Il avait déjà divergé une fois et rien ne
+le reliait à la suite. Une ligne est ajoutée au tableau des garde-fous pour les trois caches.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
+## 2.1.2 — 2026-10-06
+
+Documentation seule. `docs/tests.md` annonçait 250 tests alors que la suite en exécute 255 : les
+cinq refus de `bin/maj-socle.php`, arrivés en 2.1.0, n'étaient comptés ni décrits.
+
+**`docs/tests.md`** annonce le bon nombre et ajoute une ligne au tableau des garde-fous pour la
+mise à jour d'un site : arbre de travail non propre, version inconnue, version plus ancienne que
+celle du site, version majeure.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
+## 2.1.1 — 2026-10-06
+
+Documentation seule. La procédure de mise à jour expliquait que l'étiquette est l'unité livrée,
+sans dire qu'une étiquette publiée est désormais définitive.
+
+**`docs/mise-a-jour-socle.md`** précise qu'une version publiée ne change plus : son étiquette
+n'est ni déplaçable ni supprimable, et un numéro désigne toujours le même contenu. Deux sites
+qui fusionnent la même version reçoivent donc exactement la même chose, quel que soit le moment.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
+## 2.1.0 — 2026-10-05
+
+Mettre un site à jour depuis le socle demandait six étapes manuelles, dont `install-cockpit.php
+--force`, qui une fois oubliée laissait croire que la fusion n'avait rien changé.
+
+**Une commande déroule la mise à jour.**
+
+```bash
+php bin/maj-socle.php                 # où en est le site, et ce qui existe
+php bin/maj-socle.php --vers=2.0.13   # fusionne et enchaîne les commandes qui suivent
+```
+
+Sans argument, elle affiche la version installée, les versions plus récentes, et les entrées de
+journal qui les séparent, lues depuis le socle. Avec `--vers`, elle crée une branche dédiée,
+fusionne l'étiquette, puis lance `composer install`, `php bin/install-cockpit.php --force`,
+`php bin/purge-cache.php` et les tests.
+
+**Elle refuse de s'exécuter dans quatre cas** : arbre de travail non propre, version inconnue ou
+mal formée, version plus ancienne que celle du site, et version majeure. Cette dernière demande
+une intervention manuelle décrite sous la version dans ce journal, qu'une commande ne remplace
+pas.
+
+En cas de conflit, elle s'arrête et affiche les fichiers à reprendre. Elle ne pousse pas et ne
+fusionne jamais dans `main`.
+
+Les tests sont ignorés sur un site installé sans dépendances de développement, plutôt que de
+faire échouer la mise à jour sur un outil délibérément absent.
+
+`docs/mise-a-jour-socle.md` présente désormais la commande en tête, la procédure manuelle
+restant dessous.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
+## 2.0.13 — 2026-10-05
+
+Documentation seule. Les deux addons arrivés en 2.0.8 et 2.0.9 n'étaient décrits que dans le
+README, et le nombre de tests annoncé datait d'avant leur arrivée.
+
+**`docs/architecture.md`** cite désormais `AdminClient` et `Passerelle` dans le tableau des
+responsabilités, à côté d'`EditorGuards`.
+
+**`docs/guide-client.md`** décrit ce que le client voit réellement : une administration en
+français, les actions interdites qui ne lui sont plus proposées, et la pastille qui relie le
+site à son administration.
+
+**`docs/securite.md`** documente le cookie de la passerelle : ce qu'il contient, pourquoi il
+n'est pas `httponly`, et dans quels cas la pastille ne s'affiche pas.
+
+**`docs/tests.md`** annonce 250 tests, et son tableau couvre les trois familles ajoutées
+depuis : administration du client, passerelle, version.
+
+Rien à faire sur un site existant au-delà de la fusion.
+
+## 2.0.12 — 2026-10-05
+
+La pastille de la passerelle restait affichée sur le site alors qu'elle n'avait plus lieu
+d'être : addon Passerelle désactivé ou retiré, ou session d'administration terminée.
+
+**La pastille ne s'affiche plus que sur une réponse affirmative.** L'addon répond désormais
+lui-même sur `/passerelle/etat`. Désactivé, il ne répond plus, et le site efface la pastille et
+son cookie, que l'administration redépose à sa page suivante. Auparavant, le site interrogeait
+`/check-session`, qui appartient à Cockpit et répondait même quand l'addon n'était plus là.
+
+**La vérification fonctionne aussi en développement.** Site et administration y occupent deux
+origines, et le navigateur bloquait la question : la pastille s'affichait alors par défaut, même
+après la fin de la session. Seule l'adresse inscrite dans `SITE_URL` peut maintenant poser la
+question depuis une autre origine.
+
+**La question ne prolonge pas la session.** Elle suit les mêmes règles que le contrôle natif de
+Cockpit : l'inactivité met fin à la session, et l'interrogation de fond ne la rafraîchit pas.
+
+Deux tests ajoutés dans `GardeFous/PasserelleTest`.
+
+Rien à faire sur un site existant au-delà de la fusion et de `php bin/install-cockpit.php
+--force`, qui recopie l'addon modifié dans `public/admin/`.
+
+Proposé par Pascal Fortunati (#53).
+
+## 2.0.11 — 2026-10-05
+
+`composer.json` déclarait `ext-curl` et `ext-json`, mais pas `ext-pdo_sqlite` ni `ext-gd`. Les
+deux sont pourtant indispensables : la première porte la base de données de l'administration,
+la seconde fabrique les copies allégées des images. Le README les présentait d'ailleurs comme
+des prérequis.
+
+**L'installation échoue désormais au bon endroit.** Sur un hébergement dépourvu de ces
+extensions, `composer install` réussissait et l'échec survenait plus loin, à l'installation de
+Cockpit ou au premier envoi d'image, avec un message qui ne nommait pas la cause. Composer
+refuse maintenant d'installer et indique l'extension manquante.
+
+Rien à faire sur un site existant : un site en service tourne forcément sur un hébergement qui
+possède ces extensions, sans quoi il ne fonctionnerait pas.
+
+## 2.0.10 — 2026-10-03
+
+Le fichier `VERSION` était resté à 2.0.6 alors que les versions 2.0.7, 2.0.8 et 2.0.9 ont été
+publiées. Un site qui fusionnait la dernière version affichait donc un numéro faux, et la
+première étape de la mise à jour, la lecture de `VERSION`, ne disait pas la vérité.
+
+**`VERSION` porte de nouveau le numéro publié.** Un test le vérifie désormais à chaque
+exécution de la suite : `tests/GardeFous/VersionTest.php` compare `VERSION` à la première
+entrée de ce journal et refuse un numéro qui ne suit pas la forme `X.Y.Z`.
+
+**Les étiquettes se listent dans l'ordre des versions.** `docs/mise-a-jour-socle.md` indique
+`git tag -l 'v*' --sort=v:refname`. Le tri alphabétique par défaut plaçait `v2.0.10` entre
+`v2.0.1` et `v2.0.2`.
+
+**L'étiquette `v2.0.6`, jamais posée, l'a été sur l'état qui portait ce numéro.**
+
+Rien à faire sur un site existant au-delà de la fusion.
+
+## 2.0.9 — 2026-10-02
+
+Une passerelle facilite désormais la navigation entre le site public et l’administration pour la personne connectée, sans exposer l’adresse de l’administration aux visiteurs.
+
+**Le site indique discrètement qu’une session d’administration est active.** Une pastille affichant l’avatar de la personne connectée et un point vert « en ligne » apparaît en bas à gauche du site. Un clic ouvre le tableau de bord de l’administration dans un nouvel onglet. La pastille n’est jamais affichée aux visiteurs et son interface s’adapte aux écrans mobiles.
+
+**L’administration permet de revenir rapidement sur le site.** Les actions « Voir le site » et « Voir cette page » permettent de passer de Cockpit au site public sans avoir à rechercher manuellement la page correspondante.
+
+**L’adresse de l’administration n’est pas inscrite dans les fichiers publics.** La passerelle repose sur un cookie de session déposé uniquement dans le navigateur authentifié et supprimé à la déconnexion. Lorsque le site et l’administration partagent la même origine, le site vérifie la session via `/check-session` avant d’afficher la passerelle.
+
+**Le cache des pages publiques reste utilisable.** La pastille n’est pas intégrée au HTML mis en cache : elle est ajoutée dans le navigateur après vérification de la session. Une même page en cache peut ainsi être servie aux visiteurs comme aux utilisateurs connectés sans exposer d’information liée à l’administration.
+
+Quatre tests dans `GardeFous/PasserelleTest` couvrent le fonctionnement et les garde-fous associés à cette passerelle.
+
+Rien à faire sur un site existant au-delà de la fusion et des commandes habituelles d’après-fusion décrites dans `docs/mise-a-jour-socle.md`.
+
+Proposé par Pascal Fortunati (#49).
+
+## 2.0.8 — 2026-10-02
+
+L'administration Cockpit est désormais francisée et n'affiche plus aux comptes non administrateurs les actions qu'ils ne peuvent pas utiliser.
+
+**L'administration est disponible en français.** L'addon `AdminClient` fournit 530 traductions dans `i18n/fr.php`, chargées lorsque la langue de Cockpit est réglée sur `fr`. Les libellés conservent leur casse telle qu'elle est définie dans les traductions : « Nom du site », par exemple, n'est plus transformé en « Nom Du Site ».
+
+**Les comptes non administrateurs ne voient plus les actions qui leur sont interdites.** « Modifier le modèle », l'objet JSON et le menu `⋮` des modèles sont masqués lorsque l'utilisateur n'est pas administrateur. Un menu `…` qui ne contient plus aucune action est également retiré. Cockpit affichait auparavant ces possibilités à tous les utilisateurs avant de répondre `Unauthorized request` lorsqu'un compte non autorisé tentait de les utiliser.
+
+**Les nouveaux addons sont chargés immédiatement après leur installation.** `bin/install-cockpit.php` vide désormais `storage/cache/modules.cache.php`. Sur une installation déjà en service, un addon nouvellement ajouté pouvait jusque-là être correctement copié dans l'administration sans être détecté par Cockpit à cause du cache des modules.
+
+Le README a également été mis à jour : la section « Bon à savoir » ne présente plus la francisation de l'administration comme un travail restant à faire.
+
+Quatre tests couvrent ces changements dans `GardeFous/AdminClientTest`.
+
+**La procédure de mise à jour du socle couvre les dépôts sans historique commun.** La documentation utilise désormais `--allow-unrelated-histories` lors de la fusion d'une version du socle. Cette option permet notamment d'effectuer la mise à jour lorsqu'un dépôt vient d'être initialisé et que son historique Git ne partage pas d'ancêtre avec celui du socle.
+
+Rien à faire sur un site existant au-delà de la fusion et des commandes habituelles d'après-fusion décrites dans `docs/mise-a-jour-socle.md`.
+
+Proposé par Pascal Fortunati (#44).
+
+## 2.0.7 — 2026-10-02
+
+Deux corrections concernant l'administration Cockpit et l'environnement de développement.
+
+**La page « Identité du site » ne bloque plus le navigateur.** Deux scripts, `cockpit/addons/EditorGuards/assets/contraste-couleurs.js` et `cockpit/addons/Media/assets/poids-images.js`, utilisaient des `MutationObserver` dont les fonctions `annotate()` modifiaient elles-mêmes le DOM à chaque passage. Chaque modification relançait l'observateur et pouvait créer une boucle infinie, particulièrement sur cette page qui réunit des champs de couleur et d'images.
+
+Le contrôle du contraste ne modifie désormais la classe ou le texte de son alerte que lorsque leur valeur change réellement. Le contrôle du poids des images conserve de la même manière l'alerte existante au lieu de la supprimer puis de la recréer à chaque passage. Les deux traitements sont ainsi idempotents et ne redéclenchent plus inutilement leurs observateurs.
+
+**Les processus Composer ne sont plus interrompus par le timeout par défaut.** `composer.json` définit désormais `"process-timeout": 0`. Les commandes longues lancées par les scripts Composer peuvent ainsi rester actives sans être arrêtées automatiquement.
+
+Rien à faire sur un site existant au-delà de la fusion et de `php bin/install-cockpit.php --force` pour recopier les addons modifiés dans `public/admin/`.
+
+Proposé par Céline Devaux (#42).
+
 ## 2.0.6 — 2026-09-02
 
 Trois corrections relevées en vérifiant une mise en ligne.

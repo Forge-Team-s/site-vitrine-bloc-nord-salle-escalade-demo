@@ -1,0 +1,39 @@
+{# Espaces de la salle, une carte chacun.
+
+   La photo est facultative : tant que les blocs ne sont pas posés, une carte
+   sans photo garde sa place, et la vraie photo s'ajoute plus tard sans rien
+   refaire. #}
+
+<section class="bloc bloc-espaces">
+
+    {% if titre %}
+        <h{{ niveau }}>{{ titre }}</h{{ niveau }}>
+    {% endif %}
+
+    {% if bloc.introduction %}
+        <p class="bloc-espaces__introduction">{{ bloc.introduction }}</p>
+    {% endif %}
+
+    {% if bloc.cartes is not empty %}
+        <ul class="espaces">
+            {% for carte in bloc.cartes %}
+                <li class="espace{% if not carte.image %} espace--sans-photo{% endif %}">
+                    {% include 'partials/image.html.twig' with {
+                        asset: carte.image,
+                        alt: carte.alt,
+                        classe: 'espace__image',
+                        sizes: '(min-width: 60rem) 19rem, (min-width: 40rem) 50vw, 100vw'
+                    } only %}
+
+                    <div class="espace__texte">
+                        <h{{ niveau + 1 }} class="espace__titre">{{ carte.titre }}</h{{ niveau + 1 }}>
+                        {% if carte.texte %}
+                            <p>{{ carte.texte|nl2br }}</p>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</section>
