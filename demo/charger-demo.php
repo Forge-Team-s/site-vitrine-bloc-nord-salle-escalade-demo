@@ -225,7 +225,7 @@ $tarifs = enregistrerPage($content, [
                 ['libelle' => 'Séance enfant', 'prix' => '8 €', 'precision' => 'moins de 14 ans', 'miseEnAvant' => false],
                 ['libelle' => 'Location de chaussons', 'prix' => '4 €', 'precision' => 'par séance', 'miseEnAvant' => false],
             ],
-            'note' => 'Les moins de 14 ans grimpent accompagnés d’un adulte.',
+            'remarque' => 'Les moins de 14 ans grimpent accompagnés d’un adulte.',
         ],
         [
             'type' => 'texte-image',

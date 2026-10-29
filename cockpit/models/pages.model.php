@@ -29,11 +29,10 @@ $hasImage = "['hero', 'texte-image'].includes(data.type)";
 $hasTexte = "['texte-image', 'contact', 'formulaire'].includes(data.type)";
 
 // Sections propres à Bloc Nord, rendues par templates-client/blocs/.
-$isTarifs = "data.type === 'tarifs'";
 $isPlanning = "data.type === 'planning'";
-$hasIntroduction = "['temoignages', 'tarifs', 'planning'].includes(data.type)";
-$hasBouton = "['hero', 'tarifs', 'planning'].includes(data.type)";
-$hasNote = "['tarifs', 'planning'].includes(data.type)";
+$hasIntroduction = "['temoignages', 'planning'].includes(data.type)";
+$hasBouton = "['hero', 'planning'].includes(data.type)";
+$hasNote = "['planning'].includes(data.type)";
 $hasHoraires = "['contact'].includes(data.type)";
 
 $jours = [
@@ -109,7 +108,6 @@ return [
                                 ['value' => 'contact', 'label' => 'Coordonnées'],
                                 ['value' => 'formulaire', 'label' => 'Formulaire de contact'],
                                 ['value' => 'temoignages', 'label' => 'Témoignages'],
-                                ['value' => 'tarifs', 'label' => 'Tarifs'],
                                 ['value' => 'planning', 'label' => 'Planning de la semaine'],
                             ],
                         ],
@@ -264,64 +262,6 @@ return [
                         'width' => '1-1',
                         'condition' => $hasHoraires,
                         'opts' => ['default' => true],
-                    ],
-
-                    // ── Tarifs ──────────────────────────────────────────
-                    [
-                        'name' => 'lignes',
-                        'type' => 'set',
-                        'label' => 'Lignes de tarif',
-                        'info' => 'Une ligne par tarif, dans l’ordre d’affichage. Sept lignes au plus restent lisibles sur un téléphone.',
-                        'multiple' => true,
-                        'width' => '1-1',
-                        'condition' => $isTarifs,
-                        'opts' => [
-                            'display' => '${data.libelle || \'Tarif\'} ${data.prix || \'\'}',
-                            'fields' => [
-                                [
-                                    'name' => 'libelle',
-                                    'type' => 'text',
-                                    'label' => 'Intitulé',
-                                    'required' => true,
-                                    'width' => '1-2',
-                                    'opts' => ['placeholder' => 'Séance simple', 'maxlength' => 40],
-                                ],
-                                [
-                                    'name' => 'prix',
-                                    'type' => 'text',
-                                    'label' => 'Prix',
-                                    'required' => true,
-                                    'width' => '1-2',
-                                    'opts' => ['placeholder' => '13 €', 'maxlength' => 20],
-                                ],
-                                [
-                                    'name' => 'precision',
-                                    'type' => 'text',
-                                    'label' => 'Précision',
-                                    'info' => 'Facultatif, affichée en petit sous l’intitulé : « sur justificatif », « par mois »…',
-                                    'width' => '1-2',
-                                    'opts' => ['maxlength' => 60],
-                                ],
-                                [
-                                    'name' => 'miseEnAvant',
-                                    'type' => 'boolean',
-                                    'label' => 'Mettre en avant',
-                                    'info' => 'Surligne la ligne en orange.',
-                                    'width' => '1-2',
-                                    'opts' => ['default' => false],
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'name' => 'reprendre',
-                        'type' => 'contentItemLink',
-                        'label' => 'Reprendre les tarifs d’une autre page',
-                        'info' => 'Facultatif. Choisir la page « Tarifs » pour afficher ici les mêmes lignes : '
-                            .'les prix ne se saisissent alors qu’à un seul endroit. Les lignes ci-dessus sont ignorées.',
-                        'width' => '1-1',
-                        'condition' => $isTarifs,
-                        'opts' => ['link' => 'pages', 'display' => '${data.titre || \'Page sans titre\'}'],
                     ],
 
                     // ── Planning ────────────────────────────────────────

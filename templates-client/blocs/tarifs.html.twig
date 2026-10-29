@@ -6,13 +6,13 @@
    entre contenus en les résolvant (voir App\Content\Repository::page). #}
 
 {% set lignes = bloc.lignes|default([]) %}
-{% set note = bloc.note|default('') %}
+{% set remarque = bloc.remarque|default('') %}
 
 {% set repris = (bloc.reprendre.blocs ?? [])|filter(b => (b.type ?? '') == 'tarifs' and (b.lignes ?? []) is not empty)|first %}
 
 {% if repris %}
     {% set lignes = repris.lignes %}
-    {% set note = note ?: repris.note|default('') %}
+    {% set remarque = remarque ?: repris.remarque|default('') %}
 {% endif %}
 
 <section class="bloc bloc-tarifs">
@@ -41,8 +41,8 @@
         </dl>
     {% endif %}
 
-    {% if note %}
-        <p class="bloc-tarifs__note">{{ note }}</p>
+    {% if remarque %}
+        <p class="bloc-tarifs__note">{{ remarque }}</p>
     {% endif %}
 
     {% if bloc.boutonTexte and bloc.boutonLien %}
